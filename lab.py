@@ -4,7 +4,9 @@ from __future__ import annotations
 import argparse
 import json
 from math import erf, exp, log, sqrt
+from numbers import Integral
 from pathlib import Path
+import platform
 
 import numpy as np
 
@@ -46,13 +48,78 @@ def monte_carlo(paths=8192, seed=1729, antithetic=False):
             "payoff_evaluations": paths, "independent_observations": len(observations)}
 
 
+def convergence_experiment(path_budgets=(256, 1024, 4096, 16384), n_seeds=128, seed=1729):
+    """Compare estimators at equal payoff cost using fresh streams in every cell.
+
+    Each reported seed can be replayed with monte_carlo. Budgets are not nested,
+    and the two methods do not share normal draws. Independence is the practical
+    pseudorandom-stream guarantee of NumPy SeedSequence, not mathematical proof.
+    """
+    budgets = tuple(path_budgets)
+    if not budgets or any(isinstance(n, bool) or not isinstance(n, Integral)
+                          or n < 4 or n % 2 for n in budgets):
+        raise ValueError("Path budgets must be even integers of at least four")
+    if len(set(budgets)) != len(budgets):
+        raise ValueError("Path budgets must be distinct")
+    if isinstance(n_seeds, bool) or not isinstance(n_seeds, Integral) or n_seeds < 2:
+        raise ValueError("At least two independent seeds required")
+    if isinstance(seed, bool) or not isinstance(seed, Integral) or seed < 0:
+        raise ValueError("Root seed must be a nonnegative integer")
+    reference = black_scholes_call()
+    children = iter(np.random.SeedSequence(int(seed)).spawn(len(budgets) * 2 * int(n_seeds)))
+    rows = []
+    for paths in budgets:
+        methods = {}
+        for method, antithetic in (("plain", False), ("paired_antithetic", True)):
+            runs = []
+            for replicate in range(int(n_seeds)):
+                child = next(children)
+                run_seed = int(child.generate_state(1, dtype=np.uint64)[0])
+                run = monte_carlo(paths=int(paths), seed=run_seed, antithetic=antithetic)
+                run.update(seed=run_seed, replicate=replicate,
+                           error=run["estimate"] - reference,
+                           covers_analytic=bool(run["ci95"][0] <= reference <= run["ci95"][1]))
+                runs.append(run)
+            errors = np.array([run["error"] for run in runs])
+            covered = sum(run["covers_analytic"] for run in runs)
+            coverage = covered / int(n_seeds)
+            methods[method] = {
+                "rmse": float(np.sqrt(np.mean(errors**2))),
+                "bias": float(np.mean(errors)),
+                "empirical_coverage95": coverage,
+                "covered_count": covered,
+                "coverage_mc_standard_error": sqrt(coverage * (1 - coverage) / int(n_seeds)),
+                "mean_standard_error": float(np.mean([r["standard_error"] for r in runs])),
+                "mean_ci95_width": float(np.mean([r["ci95"][1] - r["ci95"][0] for r in runs])),
+                "runs": runs,
+            }
+        rows.append({"paths": int(paths), "methods": methods})
+    return {
+        "analytic_price": reference, "root_seed": int(seed), "n_seeds": int(n_seeds),
+        "path_budgets": [int(n) for n in budgets],
+        "seed_protocol": "SeedSequence(root).spawn(budgets * 2 * n_seeds); budget/method/replicate order; uint64 child seeds",
+        "stream_design": "Fresh independent pseudorandom streams for each budget, method, and replicate; no shared draws",
+        "nominal_coverage": 0.95,
+        "interval_method": "estimate +/- 1.96 * sample standard error; paired means for antithetic",
+        "cost_model": "Equal discounted-payoff evaluations: N plain normals versus N/2 antithetic normals and N/2 independent pairs; excludes runtime and RNG costs",
+        "option_parameters": {"spot": 100.0, "strike": 100.0, "rate": 0.03,
+                              "volatility": 0.2, "maturity": 1.0},
+        "rows": rows,
+    }
+
+
 def experiment():
     reference = black_scholes_call()
     plain, anti = monte_carlo(), monte_carlo(antithetic=True)
     return {"project": "quantum-estimation-lab", "seed": 1729,
-            "metrics": {"analytic_price": reference, "monte_carlo": plain, "antithetic": anti},
-            "provenance": {"data": "Synthetic GBM terminal draws; risk-neutral European call", "numpy": np.__version__},
+            "metrics": {"analytic_price": reference, "monte_carlo": plain, "antithetic": anti,
+                        "convergence": convergence_experiment()},
+            "provenance": {"data": "Synthetic GBM terminal draws; risk-neutral European call",
+                           "numpy": np.__version__, "python": platform.python_version(),
+                           "bit_generator": type(np.random.default_rng(0).bit_generator).__name__},
             "limitations": ["Normal approximation confidence intervals, not finite-sample guarantees.",
+                            "Coverage and RMSE have sampling uncertainty across a finite set of seeds; no calibration or monotonic convergence guarantee.",
+                            "One synthetic option parameter setting; equal payoff counts do not establish a runtime speedup.",
                             "Classical baseline only; quantum methods and full oracle costs are later milestones."]}
 
 
@@ -63,6 +130,6 @@ if __name__ == "__main__":
     result = json.dumps(experiment(), indent=2, allow_nan=False) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(result, encoding="utf-8")
+        args.output.write_text(result, encoding="utf-8", newline="\n")
     else:
         print(result)

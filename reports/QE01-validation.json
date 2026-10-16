@@ -1,0 +1,21 @@
+{
+  "task_id": "QE01",
+  "status": "passed",
+  "artifact": "results/latest.json",
+  "replayed_runs": 1024,
+  "unique_run_seeds": 1024,
+  "replicates_per_cell": 128,
+  "path_budgets": [
+    256,
+    1024,
+    4096,
+    16384
+  ],
+  "checks": [
+    "independent math.fsum RMSE recomputation",
+    "coverage recount",
+    "all raw runs exactly replayed",
+    "unique seeds",
+    "milestone evidence paths exist"
+  ]
+}

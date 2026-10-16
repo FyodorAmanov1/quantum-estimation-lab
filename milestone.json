@@ -1,0 +1,14 @@
+{
+  "task_id": "QE01",
+  "status": "completed",
+  "summary": "Added a reproducible 128-seed comparison of plain and correctly paired-antithetic Monte Carlo at four equal payoff budgets, with raw runs, analytic-reference RMSE, bias, empirical 95% interval coverage and coverage sampling error. Nine tests pass. Antithetic RMSE is lower in all measured cells; coverage shortfalls and finite-seed limitations are retained.",
+  "evidence_paths": [
+    "lab.py",
+    "tests/test_lab.py",
+    "results/latest.json",
+    "reports/QE01.md",
+    "reports/QE01-validation.json",
+    "README.md",
+    "REFERENCES.md"
+  ]
+}
