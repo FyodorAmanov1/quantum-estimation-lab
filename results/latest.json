@@ -1,0 +1,35 @@
+{
+  "project": "quantum-estimation-lab",
+  "seed": 1729,
+  "metrics": {
+    "analytic_price": 9.413403383853016,
+    "monte_carlo": {
+      "estimate": 9.417393406645788,
+      "standard_error": 0.15466662303085885,
+      "ci95": [
+        9.114246825505305,
+        9.720539987786271
+      ],
+      "payoff_evaluations": 8192,
+      "independent_observations": 8192
+    },
+    "antithetic": {
+      "estimate": 9.233031515805006,
+      "standard_error": 0.11313613512713312,
+      "ci95": [
+        9.011284690955826,
+        9.454778340654187
+      ],
+      "payoff_evaluations": 8192,
+      "independent_observations": 4096
+    }
+  },
+  "provenance": {
+    "data": "Synthetic GBM terminal draws; risk-neutral European call",
+    "numpy": "2.2.4"
+  },
+  "limitations": [
+    "Normal approximation confidence intervals, not finite-sample guarantees.",
+    "Classical baseline only; quantum methods and full oracle costs are later milestones."
+  ]
+}
