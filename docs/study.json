@@ -1,0 +1,646 @@
+{
+  "schema_version": 1,
+  "slug": "quantum-estimation-lab",
+  "title": "Quantum Risk Observatory",
+  "subtitle": "From a correlated derivatives book to the quantum estimation oracle.",
+  "accent": "#65d6b1",
+  "seed": 1729,
+  "cases": [
+    {
+      "id": "risk-1",
+      "label": "Base market",
+      "kicker": "MULTI-ASSET DERIVATIVE RISK",
+      "title": "The portfolio, under pressure.",
+      "description": "Four correlated option positions. Revalue the full book at a 21-day horizon and compare three simulation designs at matched path budgets.",
+      "metrics": [
+        {
+          "label": "99% value at risk",
+          "value": 683.8816824040545,
+          "unit": "USD",
+          "note": ""
+        },
+        {
+          "label": "99% expected shortfall",
+          "value": 764.1748139172402,
+          "unit": "USD",
+          "note": ""
+        },
+        {
+          "label": "99% potential exposure",
+          "value": 1541.6003364587596,
+          "unit": "USD",
+          "note": ""
+        },
+        {
+          "label": "Scenarios",
+          "value": 32768.0,
+          "unit": "paths",
+          "note": ""
+        }
+      ],
+      "charts": [
+        {
+          "title": "Discounted mark-to-market loss distribution",
+          "x": [
+            -1114.7602366368383,
+            -1078.676412303073,
+            -1042.5925879693077,
+            -1006.5087636355424,
+            -970.424939301777,
+            -934.3411149680117,
+            -898.2572906342464,
+            -862.1734663004811,
+            -826.0896419667158,
+            -790.0058176329505,
+            -753.9219932991853,
+            -717.8381689654199,
+            -681.7543446316546,
+            -645.6705202978892,
+            -609.5866959641239,
+            -573.5028716303586,
+            -537.4190472965934,
+            -501.3352229628281,
+            -465.25139862906275,
+            -429.1675742952974,
+            -393.08374996153213,
+            -356.9999256277668,
+            -320.91610129400146,
+            -284.8322769602362,
+            -248.7484526264709,
+            -212.66462829270563,
+            -176.5808039589403,
+            -140.49697962517496,
+            -104.41315529140962,
+            -68.32933095764429,
+            -32.24550662387901,
+            3.838317709886269,
+            39.92214204365155,
+            76.00596637741683,
+            112.0897907111821,
+            148.17361504494738,
+            184.25743937871277,
+            220.34126371247817,
+            256.42508804624345,
+            292.5089123800087,
+            328.592736713774,
+            364.6765610475393,
+            400.76038538130456,
+            436.84420971506995,
+            472.92803404883534,
+            509.0118583826006,
+            545.0956827163659,
+            581.1795070501312,
+            617.2633313838965,
+            653.3471557176617,
+            689.430980051427,
+            725.5148043851923,
+            761.5986287189577,
+            797.6824530527231
+          ],
+          "xlabel": "Loss / USD",
+          "series": [
+            {
+              "name": "Scenario count",
+              "values": [
+                17,
+                19,
+                34,
+                46,
+                36,
+                58,
+                60,
+                77,
+                103,
+                128,
+                127,
+                156,
+                178,
+                233,
+                296,
+                319,
+                359,
+                414,
+                465,
+                593,
+                598,
+                690,
+                791,
+                866,
+                900,
+                1081,
+                1139,
+                1119,
+                1264,
+                1347,
+                1337,
+                1399,
+                1473,
+                1389,
+                1467,
+                1398,
+                1301,
+                1322,
+                1156,
+                1112,
+                1002,
+                922,
+                751,
+                670,
+                588,
+                479,
+                352,
+                286,
+                234,
+                171,
+                124,
+                92,
+                59,
+                39
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mean-loss estimation error \u00b7 12 independent runs",
+          "x": [
+            256,
+            1024,
+            4096,
+            16384
+          ],
+          "xlabel": "Payoff paths",
+          "series": [
+            {
+              "name": "plain",
+              "values": [
+                17.6629356603904,
+                11.628848134731406,
+                6.7643425359596705,
+                2.775218410272808
+              ]
+            },
+            {
+              "name": "antithetic",
+              "values": [
+                5.2144310186575265,
+                2.359246536992228,
+                0.9562371741893181,
+                0.7123415330626751
+              ]
+            },
+            {
+              "name": "sobol",
+              "values": [
+                0.3490927540146719,
+                0.11916359389932593,
+                0.03356833413196016,
+                0.007820090841307007
+              ]
+            }
+          ]
+        }
+      ],
+      "table": {
+        "columns": [
+          "Asset",
+          "Position",
+          "Instrument",
+          "Spot",
+          "Strike",
+          "Annual volatility"
+        ],
+        "rows": [
+          [
+            "A",
+            50,
+            "Call",
+            100,
+            100,
+            0.22
+          ],
+          [
+            "B",
+            -30,
+            "Put",
+            80,
+            85,
+            0.28
+          ],
+          [
+            "C",
+            40,
+            "Call",
+            120,
+            115,
+            0.18
+          ],
+          [
+            "D",
+            20,
+            "Put",
+            60,
+            65,
+            0.35
+          ]
+        ]
+      },
+      "method": [
+        "Correlated GBM terminal simulation; Black\u2013Scholes revaluation of remaining six-month option maturities. Positions and currency scale are explicit.",
+        "Randomized Sobol and antithetic designs are compared with independent Monte Carlo using 12 separate seeds at four budgets. The high-budget independent reference is itself a simulation estimate.",
+        "VaR is an empirical loss quantile; expected shortfall averages observations in the empirical tail. PFE uses positive future book value, not losses."
+      ],
+      "limitations": [
+        "Illustrative synthetic asset parameters, not calibrated market data or an investment recommendation.",
+        "Lognormal dynamics omit stochastic volatility, defaults, liquidity and funding; tail estimates remain model dependent.",
+        "The chart compares mean-loss error. It does not establish quantum advantage or tail-quantile confidence intervals."
+      ],
+      "reproduce": "python src/studio.py --out docs/study.json"
+    },
+    {
+      "id": "risk-1.8",
+      "label": "Volatility shock",
+      "kicker": "MULTI-ASSET DERIVATIVE RISK",
+      "title": "The portfolio, under pressure.",
+      "description": "Four correlated option positions. Revalue the full book at a 21-day horizon and compare three simulation designs at matched path budgets.",
+      "metrics": [
+        {
+          "label": "99% value at risk",
+          "value": 1118.2351435867747,
+          "unit": "USD",
+          "note": ""
+        },
+        {
+          "label": "99% expected shortfall",
+          "value": 1236.1997941165755,
+          "unit": "USD",
+          "note": ""
+        },
+        {
+          "label": "99% potential exposure",
+          "value": 2617.1566242457857,
+          "unit": "USD",
+          "note": ""
+        },
+        {
+          "label": "Scenarios",
+          "value": 32768.0,
+          "unit": "paths",
+          "note": ""
+        }
+      ],
+      "charts": [
+        {
+          "title": "Discounted mark-to-market loss distribution",
+          "x": [
+            -2026.492284903465,
+            -1964.016867635093,
+            -1901.541450366721,
+            -1839.066033098349,
+            -1776.590615829977,
+            -1714.115198561605,
+            -1651.639781293233,
+            -1589.164364024861,
+            -1526.688946756489,
+            -1464.213529488117,
+            -1401.738112219745,
+            -1339.262694951373,
+            -1276.787277683001,
+            -1214.311860414629,
+            -1151.8364431462571,
+            -1089.3610258778851,
+            -1026.8856086095132,
+            -964.4101913411412,
+            -901.9347740727692,
+            -839.4593568043972,
+            -776.9839395360252,
+            -714.5085222676532,
+            -652.0331049992812,
+            -589.5576877309093,
+            -527.0822704625373,
+            -464.6068531941653,
+            -402.1314359257933,
+            -339.6560186574213,
+            -277.18060138904934,
+            -214.70518412067736,
+            -152.22976685230537,
+            -89.75434958393339,
+            -27.278932315561406,
+            35.19648495281058,
+            97.67190222118256,
+            160.14731948955455,
+            222.62273675792653,
+            285.0981540262985,
+            347.5735712946705,
+            410.0489885630425,
+            472.52440583141447,
+            534.9998230997865,
+            597.4752403681584,
+            659.9506576365304,
+            722.4260749049024,
+            784.9014921732744,
+            847.3769094416464,
+            909.8523267100184,
+            972.3277439783903,
+            1034.8031612467623,
+            1097.2785785151343,
+            1159.7539957835063,
+            1222.2294130518783,
+            1284.7048303202505
+          ],
+          "xlabel": "Loss / USD",
+          "series": [
+            {
+              "name": "Scenario count",
+              "values": [
+                21,
+                17,
+                34,
+                32,
+                33,
+                44,
+                51,
+                68,
+                77,
+                94,
+                115,
+                116,
+                152,
+                172,
+                194,
+                262,
+                264,
+                344,
+                375,
+                432,
+                492,
+                542,
+                586,
+                725,
+                818,
+                831,
+                909,
+                1035,
+                1166,
+                1114,
+                1329,
+                1354,
+                1328,
+                1460,
+                1480,
+                1399,
+                1548,
+                1434,
+                1399,
+                1278,
+                1237,
+                1129,
+                1017,
+                863,
+                765,
+                649,
+                521,
+                374,
+                314,
+                241,
+                167,
+                113,
+                79,
+                43
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Mean-loss estimation error \u00b7 12 independent runs",
+          "x": [
+            256,
+            1024,
+            4096,
+            16384
+          ],
+          "xlabel": "Payoff paths",
+          "series": [
+            {
+              "name": "plain",
+              "values": [
+                30.531269659929674,
+                19.958474041069508,
+                11.551399629905642,
+                4.763935069710478
+              ]
+            },
+            {
+              "name": "antithetic",
+              "values": [
+                10.962467387175025,
+                4.8795655243277,
+                1.9367932620610042,
+                1.4241055291296545
+              ]
+            },
+            {
+              "name": "sobol",
+              "values": [
+                0.724384854245061,
+                0.24129978971631852,
+                0.05683060312969103,
+                0.01553697685325395
+              ]
+            }
+          ]
+        }
+      ],
+      "table": {
+        "columns": [
+          "Asset",
+          "Position",
+          "Instrument",
+          "Spot",
+          "Strike",
+          "Annual volatility"
+        ],
+        "rows": [
+          [
+            "A",
+            50,
+            "Call",
+            100,
+            100,
+            0.396
+          ],
+          [
+            "B",
+            -30,
+            "Put",
+            80,
+            85,
+            0.5040000000000001
+          ],
+          [
+            "C",
+            40,
+            "Call",
+            120,
+            115,
+            0.324
+          ],
+          [
+            "D",
+            20,
+            "Put",
+            60,
+            65,
+            0.63
+          ]
+        ]
+      },
+      "method": [
+        "Correlated GBM terminal simulation; Black\u2013Scholes revaluation of remaining six-month option maturities. Positions and currency scale are explicit.",
+        "Randomized Sobol and antithetic designs are compared with independent Monte Carlo using 12 separate seeds at four budgets. The high-budget independent reference is itself a simulation estimate.",
+        "VaR is an empirical loss quantile; expected shortfall averages observations in the empirical tail. PFE uses positive future book value, not losses."
+      ],
+      "limitations": [
+        "Illustrative synthetic asset parameters, not calibrated market data or an investment recommendation.",
+        "Lognormal dynamics omit stochastic volatility, defaults, liquidity and funding; tail estimates remain model dependent.",
+        "The chart compares mean-loss error. It does not establish quantum advantage or tail-quantile confidence intervals."
+      ],
+      "reproduce": "python src/studio.py --out docs/study.json"
+    },
+    {
+      "id": "amplitude",
+      "label": "Quantum oracle",
+      "kicker": "AMPLITUDE ESTIMATION / EXPLICIT STATEVECTOR",
+      "title": "Look inside the quantum estimator.",
+      "description": "An eight-scenario register and a payoff ancilla, explicit unitary preparation, amplitude amplification and maximum-likelihood estimation.",
+      "metrics": [
+        {
+          "label": "Exact encoded expectation",
+          "value": 0.2495,
+          "unit": "",
+          "note": ""
+        },
+        {
+          "label": "Estimated expectation",
+          "value": 0.25018020656764217,
+          "unit": "",
+          "note": ""
+        },
+        {
+          "label": "Oracle preparation calls",
+          "value": 8960.0,
+          "unit": "",
+          "note": ""
+        },
+        {
+          "label": "Logical qubits",
+          "value": 4.0,
+          "unit": "",
+          "note": ""
+        }
+      ],
+      "charts": [
+        {
+          "title": "Amplified success probability",
+          "x": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "xlabel": "Grover power",
+          "series": [
+            {
+              "name": "Explicit unitary evolution",
+              "values": [
+                0.24949999999999997,
+                0.9999969979999999,
+                0.2525049899799922,
+                0.24650704199988757,
+                0.9999729822162876,
+                0.2555218676046189,
+                0.2435262597369821,
+                0.9999249518023854,
+                0.25855048796764907
+              ]
+            },
+            {
+              "name": "Analytic prediction",
+              "values": [
+                0.24950000000000003,
+                0.999996998,
+                0.25250498997999177,
+                0.24650704199988802,
+                0.9999729822162876,
+                0.2555218676046178,
+                0.24352625973698294,
+                0.9999249518023857,
+                0.2585504879676484
+              ]
+            }
+          ]
+        }
+      ],
+      "table": {
+        "columns": [
+          "Grover power",
+          "Successful shots",
+          "Total shots"
+        ],
+        "rows": [
+          [
+            0,
+            63,
+            256
+          ],
+          [
+            1,
+            256,
+            256
+          ],
+          [
+            2,
+            57,
+            256
+          ],
+          [
+            4,
+            256,
+            256
+          ],
+          [
+            8,
+            65,
+            256
+          ]
+        ]
+      },
+      "method": [
+        "Prepare amplitudes sqrt(p_j(1-f_j)) and sqrt(p_j f_j) on the scenario/ancilla basis. Householder state preparation is unitary and explicitly inverted inside the Grover operator.",
+        "A Bernoulli likelihood over Grover powers estimates the bounded expectation. The profile-likelihood bounding interval is 0.24740 to 0.25293; it is an asymptotic, potentially disconnected likelihood set.",
+        "At the same 8960 preparation-query budget a recorded direct Bernoulli estimate is 0.24967. One random trial is not a comparative performance study."
+      ],
+      "limitations": [
+        "Dense unitary simulation is exponential and is not a compiled fault-tolerant implementation.",
+        "This bounded discrete payoff is separate from the portfolio's unbounded continuous loss; no claim that the oracle directly estimates its VaR is made.",
+        "State preparation, inverse preparation and Grover queries are counted. Device gates, errors, compilation and classical inference costs are not hidden in a speedup claim."
+      ],
+      "reproduce": "python src/studio.py --out docs/study.json"
+    }
+  ],
+  "references": [
+    {
+      "title": "Original portfolio PFE project",
+      "url": "https://github.com/FyodorAmanov1/QStockPrediction"
+    },
+    {
+      "title": "Amplitude amplification and estimation",
+      "url": "https://arxiv.org/abs/quant-ph/0005055"
+    }
+  ],
+  "provenance": "New implementation inspired by the application scope of QStockPrediction. Synthetic market parameters; exact CPU statevector experiments. No cloud hardware or API calls."
+}
