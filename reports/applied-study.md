@@ -90,6 +90,10 @@ At the same 8960 preparation-query budget a recorded direct Bernoulli estimate i
 - This bounded discrete payoff is separate from the portfolio's unbounded continuous loss; no claim that the oracle directly estimates its VaR is made.
 - State preparation, inverse preparation and Grover queries are counted. Device gates, errors, compilation and classical inference costs are not hidden in a speedup claim.
 
+## Interpretation
+
+The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The explicit quantum oracle is a separate bounded discrete problem. Connecting its encoding to portfolio exposure requires a documented approximation-error budget.
+
 ## Concepts to explain in an interview
 
 Explain the objective and units, where each baseline obtains its information, what was fixed before evaluation, how costs and uncertainty were measured, and one failure the model cannot capture. Reproduce the data before presenting a number; distinguish an implementation demonstration from a validated research conclusion.
