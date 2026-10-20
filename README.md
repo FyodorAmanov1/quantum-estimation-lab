@@ -51,6 +51,10 @@ CI reproduces every applied case with `python src/studio.py --check docs/study.j
 - Oracle preparation calls: **8960 **
 - Logical qubits: **4 **
 
+## Interpretation
+
+The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The explicit quantum oracle is a separate bounded discrete problem. Connecting its encoding to portfolio exposure requires a documented approximation-error budget.
+
 ## Design
 
 ```mermaid
