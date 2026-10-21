@@ -1,95 +1,80 @@
 # Quantum Risk Observatory
 
-From a correlated derivatives book to the quantum estimation oracle.
+**How do simulation choices affect derivatives risk estimates, and what would a quantum expectation estimator actually need to encode?**
 
-**[Open the interactive research studio](https://fyodoramanov1.github.io/quantum-estimation-lab/)** · [Measured study](docs/study.json) · [Technical case study](reports/applied-study.md) · [Source](src/studio.py)
+Quantum Risk Observatory connects a small derivatives portfolio to inspectable numerical experiments. It compares classical sampling methods, separates tail loss from future exposure, and implements a bounded quantum oracle whose preparation cost is visible.
 
-Build a defensible derivatives-risk research application connecting classical scenario methods to explicit quantum estimation costs.
+[Explore the dashboard](https://fyodoramanov1.github.io/quantum-estimation-lab/) · [Read the study](reports/applied-study.md) · [Inspect the implementation](src/studio.py)
 
-## What you can do
+## The experiment
 
-- **Base market:** Four correlated option positions. Revalue the full book at a 21-day horizon and compare three simulation designs at matched path budgets.
-- **Volatility shock:** Four correlated option positions. Revalue the full book at a 21-day horizon and compare three simulation designs at matched path budgets.
-- **Quantum oracle:** An eight-scenario register and a payoff ancilla, explicit unitary preparation, amplitude amplification and maximum-likelihood estimation.
+A four-asset portfolio holds long and short European calls and puts. Correlated geometric Brownian motion generates future spots over a 21-trading-day horizon; Black–Scholes revaluation produces the portfolio distribution.
 
-The interface selects recorded experiments, toggles chart series and exports the comparison table. Each view includes the method, assumptions, provenance and its reproduce command. No API key is required. Market Replay additionally plays the actual book snapshots; the Evidence Observatory performs local retrieval and numeric-claim checks.
+- **Risk:** empirical 99% value at risk (VaR), expected shortfall (ES) and potential future exposure (PFE).
+- **Sampling:** independent Monte Carlo, paired antithetic paths and independently scrambled Sobol sequences.
+- **Convergence:** mean-loss estimation error across 12 seeds and four path budgets, measured against a separate high-budget Sobol reference.
+- **Stress:** asset volatilities multiplied by 1.8, with the correlation structure held fixed.
 
-## Reproduce
+VaR and ES describe portfolio losses. PFE is a quantile of positive future mark-to-market value. They answer different risk questions and are reported separately.
 
-Python 3.12; CPU only. From this repository:
+## Recorded results
 
-```powershell
+The bundled study uses 32,768 paths for each risk distribution. Values are in USD for the synthetic portfolio defined in the source.
+
+| Scenario | 99% VaR | 99% ES | 99% PFE |
+|---|---:|---:|---:|
+| Baseline | 683.88 | 764.17 | 1,541.60 |
+| Volatility stress | 1,118.24 | 1,236.20 | 2,617.16 |
+
+The dashboard pairs these risk summaries with the convergence experiment. Its RMSE curves concern **mean loss**, rather than the sampling error of VaR or ES.
+
+## Inside the quantum estimator
+
+A separate eight-scenario example encodes a bounded expectation using three scenario qubits and one ancilla. The implementation constructs the state-preparation matrix, reflections and Grover operator explicitly, then fits an amplitude from binomial measurement counts using maximum likelihood.
+
+The recorded example estimates **0.250180** against an exact expectation of **0.249500**, using **8,960 preparation-or-inverse calls**. The accounting includes the repeated preparations within Grover powers.
+
+This example exposes the oracle assumptions behind amplitude estimation. It does not directly estimate the portfolio's VaR, compile a market-data oracle or establish a hardware speedup.
+
+## Scope and interpretation
+
+Prices, positions and correlations are synthetic. The model omits transaction costs, counterparty default and a calibrated volatility surface. Tail estimates retain Monte Carlo uncertainty. A price-CSV calibration helper exists in the source, but is not yet connected to the scenario-generation command.
+
+The most useful extension is a controlled comparison of tail-estimation error and oracle construction cost on the same financial quantity.
+
+## Run locally
+
+Use Python 3.12. From the repository root:
+
+```bash
+python -m venv .venv
+```
+
+Activate it with `.venv/Scripts/Activate.ps1` in PowerShell or
+`source .venv/bin/activate` on macOS/Linux. Then run:
+
+```bash
 python -m pip install -r requirements.txt
-python src/studio.py --out docs/study.json
 python -m http.server 8000 --directory docs
 ```
 
-Open `http://localhost:8000`. The static app fetches its local JSON, so use HTTP rather than opening `index.html` directly. No JavaScript build step or package installation is needed.
+Open
+<http://localhost:8000> to explore the bundled study without recomputing it.
 
-CI reproduces every applied case with `python src/studio.py --check docs/study.json`, checks numerical invariants and retains the original independent numerical contract. New applied code lives under `src/`; `lab.py` and its original CLI remain compatible for the existing research milestones.
+To regenerate the study or compare it with the saved artifact:
 
-## Recorded findings
-
-### Base market
-
-- 99% value at risk: **683.882 USD**
-- 99% expected shortfall: **764.175 USD**
-- 99% potential exposure: **1541.6 USD**
-- Scenarios: **32768 paths**
-
-### Volatility shock
-
-- 99% value at risk: **1118.24 USD**
-- 99% expected shortfall: **1236.2 USD**
-- 99% potential exposure: **2617.16 USD**
-- Scenarios: **32768 paths**
-
-### Quantum oracle
-
-- Exact encoded expectation: **0.2495 **
-- Estimated expectation: **0.25018 **
-- Oracle preparation calls: **8960 **
-- Logical qubits: **4 **
-
-## Interpretation
-
-The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The explicit quantum oracle is a separate bounded discrete problem. Connecting its encoding to portfolio exposure requires a documented approximation-error budget.
-
-## Design
-
-```mermaid
-flowchart LR
-  Inputs[Explicit inputs and seed] --> Engine[Python numerical engine]
-  Engine --> Checks[Domain invariants and reference comparisons]
-  Checks --> Artifact[docs/study.json]
-  Artifact --> UI[Static interactive studio]
-  Artifact --> CI[Independent reproduction in CI]
+```bash
+python src/studio.py --out docs/study.json
+python src/studio.py --check docs/study.json
 ```
 
+The browser displays recorded experiments; it does not run the Python simulation.
+Use its charts, case selector and data exports to inspect the results.
 
+## Explore the implementation
 
-## Scientific boundaries
-
-New implementation inspired by the application scope of QStockPrediction. Synthetic market parameters; exact CPU statevector experiments. No cloud hardware or API calls.
-
-- Illustrative synthetic asset parameters, not calibrated market data or an investment recommendation.
-- Lognormal dynamics omit stochastic volatility, defaults, liquidity and funding; tail estimates remain model dependent.
-- The chart compares mean-loss error. It does not establish quantum advantage or tail-quantile confidence intervals.
-- Dense unitary simulation is exponential and is not a compiled fault-tolerant implementation.
-- This bounded discrete payoff is separate from the portfolio's unbounded continuous loss; no claim that the oracle directly estimates its VaR is made.
-- State preparation, inverse preparation and Grover queries are counted. Device gates, errors, compilation and classical inference costs are not hidden in a speedup claim.
-
-## Next research questions
-
-- Calibrate multi-asset scenarios from a user-supplied price CSV and compare model risk under non-Gaussian returns.
-- Map a bounded positive-exposure payoff into the oracle and separate discretization, truncation and estimation errors.
-- Measure amplitude-estimator bias and interval coverage across independent trials, including boundary probabilities.
-
-## References
-
-- [Original portfolio PFE project](https://github.com/FyodorAmanov1/QStockPrediction)
-- [Amplitude amplification and estimation](https://arxiv.org/abs/quant-ph/0005055)
-
-## Development history
-
-The original baseline and milestone reports are preserved under `reports/`; the applied study is a separate artifact. Results are measured simulations, not claims of live profitability, quantum advantage or independent research novelty. MIT license.
+- [Experiment implementation](src/studio.py)
+- [Recorded study](docs/study.json)
+- [Applied study report](reports/applied-study.md)
+- [References](REFERENCES.md)
+- [MIT license](LICENSE)
