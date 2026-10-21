@@ -108,26 +108,35 @@ def convergence_experiment(path_budgets=(256, 1024, 4096, 16384), n_seeds=128, s
     }
 
 
-def experiment():
+def experiment(price_csv=None, as_of=None):
+    from src.studio import calibrated_comparison
+    import scipy
     reference = black_scholes_call()
     plain, anti = monte_carlo(), monte_carlo(antithetic=True)
     return {"project": "quantum-estimation-lab", "seed": 1729,
             "metrics": {"analytic_price": reference, "monte_carlo": plain, "antithetic": anti,
-                        "convergence": convergence_experiment()},
-            "provenance": {"data": "Synthetic GBM terminal draws; risk-neutral European call",
+                        "convergence": convergence_experiment(),
+                        "portfolio_calibration": calibrated_comparison(price_csv, as_of)},
+            "provenance": {"data": "Call benchmark: synthetic risk-neutral GBM; portfolio comparison records its own dated CSV provenance",
+                           "scipy": scipy.__version__,
                            "numpy": np.__version__, "python": platform.python_version(),
                            "bit_generator": type(np.random.default_rng(0).bit_generator).__name__},
             "limitations": ["Normal approximation confidence intervals, not finite-sample guarantees.",
                             "Coverage and RMSE have sampling uncertainty across a finite set of seeds; no calibration or monotonic convergence guarantee.",
                             "One synthetic option parameter setting; equal payoff counts do not establish a runtime speedup.",
-                            "Classical baseline only; quantum methods and full oracle costs are later milestones."]}
+                            "The call benchmark is classical; the studio's separate discrete quantum example does not estimate portfolio tail risk.",
+                            "CSV calibration uses constant historical covariance with risk-neutral drift; it does not establish real-world tail accuracy."]}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--price-csv", type=Path)
+    parser.add_argument("--as-of")
     args = parser.parse_args()
-    result = json.dumps(experiment(), indent=2, allow_nan=False) + "\n"
+    if args.price_csv is not None and args.as_of is None:
+        parser.error("--price-csv requires --as-of YYYY-MM-DD")
+    result = json.dumps(experiment(args.price_csv, args.as_of), indent=2, allow_nan=False) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(result, encoding="utf-8", newline="\n")

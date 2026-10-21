@@ -92,6 +92,24 @@ At the same 8960 preparation-query budget a recorded direct Bernoulli estimate i
 
 ## Interpretation
 
+The [calibrated portfolio comparison](QE02.md) adds a fourth studio case.
+The bundled input is a generated synthetic price CSV, with 253 weekday closes
+from 2025-01-13 through the explicit 2025-12-31 cutoff. At 32,768 common Sobol
+paths, frozen assumptions give VaR/ES/PFE of 683.88/764.17/1,541.60 USD;
+using CSV spots with frozen volatility/correlation gives
+333.05/380.42/410.19 USD; fitting volatility/correlation gives
+243.98/277.37/378.77 USD. The last two cases isolate the joint fitted-parameter
+change at fixed spots and fixed contracts, including initial-book repricing.
+Their paired 12-scramble VaR change averages −89.30 USD with numerical standard
+error 0.59 USD. This describes model sensitivity, not an accuracy improvement.
+Full dates, parameter snapshots, input fingerprint and replicate changes are
+exported in the studio and lab artifacts.
+
+User CSVs can be supplied with `--price-csv YOUR.csv --as-of YYYY-MM-DD` to
+either command. Historical covariance is a constant pricing/scenario proxy,
+while the drift stays at 3%. The Gaussian scenario model discards non-Gaussian
+features even though the synthetic fixture uses Student-t innovations.
+
 The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The explicit quantum oracle is a separate bounded discrete problem. Connecting its encoding to portfolio exposure requires a documented approximation-error budget.
 
 ## Concepts to explain in an interview
@@ -100,6 +118,6 @@ Explain the objective and units, where each baseline obtains its information, wh
 
 ## Next work
 
-- Calibrate multi-asset scenarios from a user-supplied price CSV and compare model risk under non-Gaussian returns.
+- Compare calibrated Gaussian scenarios against an explicit non-Gaussian return model with out-of-sample validation; covariance fitting alone does not capture tail shape.
 - Map a bounded positive-exposure payoff into the oracle and separate discretization, truncation and estimation errors.
 - Measure amplitude-estimator bias and interval coverage across independent trials, including boundary probabilities.

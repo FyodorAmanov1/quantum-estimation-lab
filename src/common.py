@@ -38,11 +38,11 @@ def _same(a, b):
     return a == b
 
 
-def finalize(study):
+def finalize(study, argv=None):
     parser = argparse.ArgumentParser(description=study["title"])
     parser.add_argument("--out", type=Path, default=Path("docs/study.json"))
     parser.add_argument("--check", type=Path)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     study = json.loads(json.dumps(study, allow_nan=False))
     _finite(study)
     assert study["cases"] and len({c["id"] for c in study["cases"]}) == len(
@@ -65,6 +65,6 @@ def finalize(study):
     else:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(
-            json.dumps(study, indent=2, allow_nan=False) + "\n", encoding="utf-8"
+            json.dumps(study, indent=2, allow_nan=False) + "\n", encoding="utf-8", newline="\n"
         )
         print(f"Wrote {args.out}: {len(study['cases'])} measured cases")

@@ -38,7 +38,9 @@ This example exposes the oracle assumptions behind amplitude estimation. It does
 
 ## Scope and interpretation
 
-Prices, positions and correlations are synthetic. The model omits transaction costs, counterparty default and a calibrated volatility surface. Tail estimates retain Monte Carlo uncertainty. A price-CSV calibration helper exists in the source, but is not yet connected to the scenario-generation command.
+Bundled prices, positions and correlations are synthetic. The model omits transaction costs, counterparty default and a calibrated volatility surface. Tail estimates retain simulation uncertainty. The **Calibrated scenarios** dashboard case connects a validated price CSV to the same correlated option-book engine, with explicit cutoff dates, parameter snapshots and paired numerical comparisons.
+
+The bundled synthetic calibration, as of **2025-12-31**, gives 99% VaR of **243.98 USD**, compared with **333.05 USD** using the same final spots and frozen volatility/correlation assumptions. This is parameter sensitivity, not evidence that the lower estimate is more accurate. See [QE02 methods and findings](reports/QE02.md).
 
 The most useful extension is a controlled comparison of tail-estimation error and oracle construction cost on the same financial quantity.
 
@@ -70,6 +72,46 @@ python src/studio.py --check docs/study.json
 
 The browser displays recorded experiments; it does not run the Python simulation.
 Use its charts, case selector and data exports to inspect the results.
+
+## Calibrate your own scenarios
+
+Supply UTF-8 CSV with header `date,A,B,C,D` (asset columns may be reordered),
+strictly increasing ISO dates, and at least 60 complete positive price rows on
+or before the explicit cutoff. Use synchronized, adjusted daily closes; no
+calendar or corporate-action corrections are inferred. Assets A–D map to the
+four existing positions and fixed strikes shown in the studio. Other asset
+sets are rejected. No market dataset is bundled or downloaded.
+
+```bash
+python src/studio.py --price-csv YOUR.csv --as-of 2025-12-31 --out results/custom-study.json
+python src/studio.py --price-csv YOUR.csv --as-of 2025-12-31 --check results/custom-study.json
+python lab.py --price-csv YOUR.csv --as-of 2025-12-31 --output results/custom-results.json
+```
+
+To view your own comparison in the dashboard, use `--out docs/study.json` in
+the first command and reload the browser. The exported artifact contains fitted
+parameters, dates and a SHA-256 fingerprint, but no raw input price history or
+local input path. Reproduction requires the same CSV and cutoff. Later rows
+are excluded from fitting; the final included date is reported separately from
+the requested as-of date.
+
+The comparison includes frozen synthetic assumptions, those assumptions at CSV
+final spots, and fitted volatility/correlation at those same spots. It uses
+common Sobol shocks and records 12 independently scrambled paired differences.
+Historical volatility also supplies the Black–Scholes repricing volatility;
+this is a proxy, not an implied-volatility calibration. Drift remains 3%.
+Fitting covariance does not preserve non-Gaussian tails or validate physical
+risk probabilities.
+
+Regenerate the clearly labeled synthetic fixture and both measured artifacts:
+
+```bash
+python examples/generate_prices.py
+python -m unittest discover -s tests -v
+python lab.py --output results/latest.json
+python src/studio.py --out docs/study.json
+python src/studio.py --check docs/study.json
+```
 
 ## Explore the implementation
 

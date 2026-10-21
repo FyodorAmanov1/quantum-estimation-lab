@@ -14491,10 +14491,307 @@
           }
         }
       ]
+    },
+    "portfolio_calibration": {
+      "data_source": "Generated synthetic price CSV; no market observations",
+      "as_of": "2025-12-31",
+      "paths": 32768,
+      "seed": 1729,
+      "method": "scrambled Sobol",
+      "horizon_trading_days": 21,
+      "confidence": 0.99,
+      "book": {
+        "assets": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "units": [
+          50,
+          -30,
+          40,
+          20
+        ],
+        "strikes": [
+          100,
+          85,
+          115,
+          65
+        ],
+        "kinds": [
+          "call",
+          "put",
+          "call",
+          "put"
+        ],
+        "maturity_years": 0.5,
+        "rate": 0.03
+      },
+      "rows": [
+        {
+          "name": "frozen",
+          "parameters": {
+            "assets": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "as_of": "2025-12-31",
+            "spot": [
+              100.0,
+              80.0,
+              120.0,
+              60.0
+            ],
+            "volatility": [
+              0.22,
+              0.28,
+              0.18,
+              0.35
+            ],
+            "correlation": [
+              [
+                1.0,
+                0.45,
+                0.2025,
+                0.09112500000000001
+              ],
+              [
+                0.45,
+                1.0,
+                0.45,
+                0.2025
+              ],
+              [
+                0.2025,
+                0.45,
+                1.0,
+                0.45
+              ],
+              [
+                0.09112500000000001,
+                0.2025,
+                0.45,
+                1.0
+              ]
+            ]
+          },
+          "initial_value": 652.9392370438857,
+          "var": 683.8816824040545,
+          "es": 764.1748139172402,
+          "pfe": 1541.6003364587596,
+          "mean_loss": 0.0005353475836031053
+        },
+        {
+          "name": "spot_matched",
+          "parameters": {
+            "assets": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "as_of": "2025-12-31",
+            "spot": [
+              56.8648928179,
+              68.9938053265,
+              78.6848284613,
+              34.7574135164
+            ],
+            "volatility": [
+              0.22,
+              0.28,
+              0.18,
+              0.35
+            ],
+            "correlation": [
+              [
+                1.0,
+                0.45,
+                0.2025,
+                0.09112500000000001
+              ],
+              [
+                0.45,
+                1.0,
+                0.45,
+                0.2025
+              ],
+              [
+                0.2025,
+                0.45,
+                1.0,
+                0.45
+              ],
+              [
+                0.09112500000000001,
+                0.2025,
+                0.45,
+                1.0
+              ]
+            ]
+          },
+          "initial_value": 105.01707338757802,
+          "var": 333.04534502433796,
+          "es": 380.41936200072143,
+          "pfe": 410.18690379931184,
+          "mean_loss": -0.0006417666319295124
+        },
+        {
+          "name": "calibrated",
+          "parameters": {
+            "assets": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "spot": [
+              56.8648928179,
+              68.9938053265,
+              78.6848284613,
+              34.7574135164
+            ],
+            "volatility": [
+              0.2800359133777453,
+              0.19804863505839465,
+              0.27105601152701275,
+              0.39791571376897866
+            ],
+            "correlation": [
+              [
+                1.0,
+                0.5751340668997103,
+                0.4321746418834592,
+                0.2812002385584247
+              ],
+              [
+                0.5751340668997103,
+                1.0,
+                0.6166059824918856,
+                0.4315609909517616
+              ],
+              [
+                0.4321746418834592,
+                0.6166059824918856,
+                1.0000000000000002,
+                0.663450157224842
+              ],
+              [
+                0.2812002385584247,
+                0.4315609909517616,
+                0.663450157224842,
+                1.0
+              ]
+            ],
+            "rows": 253,
+            "as_of": "2025-12-31",
+            "window_start": "2025-01-13",
+            "window_end": "2025-12-31",
+            "return_observations": 252,
+            "annualization": 252,
+            "diagonal_shrinkage": 0.1,
+            "input_sha256": "3c3f0c64ff276e14d3c2bb54e757fabba5ca8e3bd8d8dff1c19b529f90bc9b86"
+          },
+          "initial_value": 141.07921246509363,
+          "var": 243.9820187207788,
+          "es": 277.3748351015316,
+          "pfe": 378.7706969619768,
+          "mean_loss": -0.0011240572025717319
+        }
+      ],
+      "calibrated_minus_spot_matched": {
+        "var": -89.06332630355917,
+        "es": -103.04452689918986,
+        "pfe": -31.41620683733504
+      },
+      "paired_scramble_changes": {
+        "var": {
+          "runs": [
+            -88.86495845564167,
+            -86.0975970910907,
+            -88.14489622359639,
+            -87.55659509819503,
+            -87.67802888962663,
+            -92.64872722918898,
+            -91.35884685078139,
+            -90.91416615576765,
+            -88.83737719559196,
+            -87.30498272341646,
+            -90.95242557365066,
+            -91.20641366335619
+          ],
+          "mean": -89.29708459582531,
+          "standard_deviation": 2.04642600035762,
+          "standard_error_of_mean": 0.5907523010915606
+        },
+        "es": {
+          "runs": [
+            -103.12306857826559,
+            -103.36088657323347,
+            -103.59690511088417,
+            -103.76264952492352,
+            -102.9835024387209,
+            -103.0063401197354,
+            -103.56592971751894,
+            -103.62318615824057,
+            -103.37620195151311,
+            -103.43683178789928,
+            -102.66720791458442,
+            -103.12203719450531
+          ],
+          "mean": -103.3020622558354,
+          "standard_deviation": 0.3240874031937423,
+          "standard_error_of_mean": 0.09355597473743696
+        },
+        "pfe": {
+          "runs": [
+            -33.186272197279834,
+            -31.78303643458389,
+            -33.95729947135129,
+            -32.48637544712727,
+            -31.45524977534336,
+            -30.50918356550983,
+            -31.777008023195833,
+            -31.26964483362434,
+            -32.42342562440342,
+            -31.274516265412615,
+            -32.390204933183156,
+            -31.52969228361826
+          ],
+          "mean": -32.00349240455276,
+          "standard_deviation": 0.939208880538385,
+          "standard_error_of_mean": 0.27112625000206186
+        }
+      },
+      "scramble_seeds": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111
+      ],
+      "limitations": [
+        "Historical close-to-close covariance is used as a constant scenario and pricing volatility proxy; it is not an implied volatility surface.",
+        "The drift remains the fixed 3% rate, not an estimated physical expected return. These are model scenarios, not validated real-world tail probabilities.",
+        "252 equal trading steps per year are assumed; supply consecutive synchronized adjusted daily closes. No holiday, split or dividend adjustment is inferred.",
+        "Gaussian GBM discards skewness, heavy tails and volatility clustering, even when present in the input CSV. Calibration does not validate this model.",
+        "Twelve scramble changes measure numerical variability only; parameter uncertainty and out-of-sample accuracy are unmeasured."
+      ]
     }
   },
   "provenance": {
-    "data": "Synthetic GBM terminal draws; risk-neutral European call",
+    "data": "Call benchmark: synthetic risk-neutral GBM; portfolio comparison records its own dated CSV provenance",
+    "scipy": "1.15.2",
     "numpy": "2.2.4",
     "python": "3.12.3",
     "bit_generator": "PCG64"
@@ -14503,6 +14800,7 @@
     "Normal approximation confidence intervals, not finite-sample guarantees.",
     "Coverage and RMSE have sampling uncertainty across a finite set of seeds; no calibration or monotonic convergence guarantee.",
     "One synthetic option parameter setting; equal payoff counts do not establish a runtime speedup.",
-    "Classical baseline only; quantum methods and full oracle costs are later milestones."
+    "The call benchmark is classical; the studio's separate discrete quantum example does not estimate portfolio tail risk.",
+    "CSV calibration uses constant historical covariance with risk-neutral drift; it does not establish real-world tail accuracy."
   ]
 }
