@@ -1,14 +1,21 @@
 {
-  "task_id": "QE01",
+  "task_id": "QE02",
   "status": "completed",
-  "summary": "Added a reproducible 128-seed comparison of plain and correctly paired-antithetic Monte Carlo at four equal payoff budgets, with raw runs, analytic-reference RMSE, bias, empirical 95% interval coverage and coverage sampling error. Nine tests pass. Antithetic RMSE is lower in all measured cells; coverage shortfalls and finite-seed limitations are retained.",
+  "summary": "Connected dated user-CSV calibration to the correlated four-asset option-book engine while preserving legacy defaults. Added frozen, spot-matched and fitted comparisons with parameter snapshots, cutoff provenance, common shocks and twelve paired Sobol scrambles. The studio exposes actual results from a generated synthetic fixture; no market observations are bundled. Calibrated VaR is 243.98 USD versus 333.05 USD at matched spots, a sensitivity result rather than an accuracy claim. Fifteen tests pass and four studio cases reproduce.",
   "evidence_paths": [
     "lab.py",
+    "src/studio.py",
+    "src/common.py",
+    "tests/test_calibration.py",
     "tests/test_lab.py",
+    "examples/generate_prices.py",
+    "examples/synthetic-prices.csv",
     "results/latest.json",
-    "reports/QE01.md",
-    "reports/QE01-validation.json",
+    "docs/study.json",
+    "reports/QE02.md",
+    "reports/applied-study.md",
     "README.md",
-    "REFERENCES.md"
+    "REFERENCES.md",
+    "reports/QE02-validation.json"
   ]
 }

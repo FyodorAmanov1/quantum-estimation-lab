@@ -1,0 +1,12 @@
+{
+  "task_id": "QE02",
+  "unit_tests_passed": 15,
+  "studio_cases_reproduced": 4,
+  "legacy_studio_cases_unchanged": true,
+  "custom_csv_cli_and_cutoff_reproduced": true,
+  "missing_cli_cutoff_rejected": true,
+  "trusted_contract": {
+    "independent_checks": "passed",
+    "metrics_reproduced": true
+  }
+}
