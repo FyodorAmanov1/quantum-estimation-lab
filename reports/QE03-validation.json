@@ -1,0 +1,26 @@
+{
+  "legacy_cases_reproduced": {
+    "risk-1": true,
+    "risk-1.8": true,
+    "amplitude": true,
+    "calibration": true
+  },
+  "unit_tests_passed": 20,
+  "studio_cases_reproduced": 5,
+  "custom_csv_cli": {
+    "cutoff": "2025-08-29",
+    "window_end": "2025-08-29",
+    "lab_and_studio_model_risk_match": true,
+    "studio_reproduces": true,
+    "missing_cutoff_rejected": true
+  },
+  "artifacts": [
+    "results/latest.json",
+    "docs/study.json"
+  ],
+  "trusted_contract": {
+    "project": "quantum-estimation-lab",
+    "independent_checks": "passed",
+    "metrics_reproduced": true
+  }
+}

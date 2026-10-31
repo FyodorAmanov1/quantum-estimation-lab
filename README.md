@@ -42,7 +42,20 @@ Bundled prices, positions and correlations are synthetic. The model omits transa
 
 The bundled synthetic calibration, as of **2025-12-31**, gives 99% VaR of **243.98 USD**, compared with **333.05 USD** using the same final spots and frozen volatility/correlation assumptions. This is parameter sensitivity, not evidence that the lower estimate is more accurate. See [QE02 methods and findings](reports/QE02.md).
 
-The most useful extension is a controlled comparison of tail-estimation error and oracle construction cost on the same financial quantity.
+The **Non-Gaussian model risk** dashboard case holds fitted spots, covariance
+inputs and Black–Scholes repricing fixed while comparing GBM with a specified
+two-state common variance mixture. At shared seed 1729 and 32,768 paths,
+99% VaR changes from **242.99 to 271.51 USD**, and ES from **278.71 to
+355.31 USD**. Across twelve paired seeds the mean changes are **+26.55 USD**
+for VaR and **+81.28 USD** for ES, with numerical standard errors **1.57** and
+**2.04 USD**. The mixture assumptions are not fitted or validated on market
+returns; this measures scenario-model sensitivity. This case uses plain Monte
+Carlo, so its GBM row differs from the calibration case's Sobol row.
+See [QE03 methods and findings](reports/QE03.md). Both CSV commands below also
+generate this comparison for the supplied history.
+
+The remaining connection is a controlled comparison of tail-estimation error
+and oracle construction cost on the same financial quantity.
 
 ## Run locally
 
@@ -101,7 +114,11 @@ common Sobol shocks and records 12 independently scrambled paired differences.
 Historical volatility also supplies the Black–Scholes repricing volatility;
 this is a proxy, not an implied-volatility calibration. Drift remains 3%.
 Fitting covariance does not preserve non-Gaussian tails or validate physical
-risk probabilities.
+risk probabilities. The additional mixture comparison specifies a common
+variance multiplier of 4 with probability 10%, otherwise 2/3: mean multiplier
+1 and standardized innovation kurtosis 6. Conditional GBM drift preserves
+expected terminal spots. A shared latent state changes joint tail dependence;
+there is no estimated regime transition or volatility-clustering model.
 
 Regenerate the clearly labeled synthetic fixture and both measured artifacts:
 

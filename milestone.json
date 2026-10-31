@@ -1,21 +1,22 @@
 {
-  "task_id": "QE02",
+  "task_id": "QE03",
   "status": "completed",
-  "summary": "Connected dated user-CSV calibration to the correlated four-asset option-book engine while preserving legacy defaults. Added frozen, spot-matched and fitted comparisons with parameter snapshots, cutoff provenance, common shocks and twelve paired Sobol scrambles. The studio exposes actual results from a generated synthetic fixture; no market observations are bundled. Calibrated VaR is 243.98 USD versus 333.05 USD at matched spots, a sensitivity result rather than an accuracy claim. Fifteen tests pass and four studio cases reproduce.",
+  "summary": "Added a specified two-state common stochastic variance scenario and compared its 99% VaR/ES with calibrated GBM using identical normal draws and fixed Black-Scholes repricing. The studio and lab export full paired evidence from synthetic prices: twelve seeds give mean VaR/ES increases of 26.5503/81.2760 USD with numerical SEs 1.5666/2.0373 USD. Includes explicit variance normalization, model limitations, costs and dated user-CSV support. Existing public defaults and four prior cases are preserved; twenty tests pass and five studio cases reproduce. This measures model sensitivity without claiming market accuracy or quantum advantage.",
   "evidence_paths": [
     "lab.py",
     "src/studio.py",
     "src/common.py",
     "tests/test_calibration.py",
     "tests/test_lab.py",
+    "tests/test_model_risk.py",
     "examples/generate_prices.py",
     "examples/synthetic-prices.csv",
     "results/latest.json",
     "docs/study.json",
-    "reports/QE02.md",
+    "reports/QE03.md",
     "reports/applied-study.md",
     "README.md",
     "REFERENCES.md",
-    "reports/QE02-validation.json"
+    "reports/QE03-validation.json"
   ]
 }

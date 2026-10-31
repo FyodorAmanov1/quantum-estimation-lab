@@ -14787,6 +14787,468 @@
         "Gaussian GBM discards skewness, heavy tails and volatility clustering, even when present in the input CSV. Calibration does not validate this model.",
         "Twelve scramble changes measure numerical variability only; parameter uncertainty and out-of-sample accuracy are unmeasured."
       ]
+    },
+    "portfolio_model_risk": {
+      "data_source": "Generated synthetic price CSV; no market observations",
+      "as_of": "2025-12-31",
+      "parameters": {
+        "assets": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "spot": [
+          56.8648928179,
+          68.9938053265,
+          78.6848284613,
+          34.7574135164
+        ],
+        "volatility": [
+          0.2800359133777453,
+          0.19804863505839465,
+          0.27105601152701275,
+          0.39791571376897866
+        ],
+        "correlation": [
+          [
+            1.0,
+            0.5751340668997103,
+            0.4321746418834592,
+            0.2812002385584247
+          ],
+          [
+            0.5751340668997103,
+            1.0,
+            0.6166059824918856,
+            0.4315609909517616
+          ],
+          [
+            0.4321746418834592,
+            0.6166059824918856,
+            1.0000000000000002,
+            0.663450157224842
+          ],
+          [
+            0.2812002385584247,
+            0.4315609909517616,
+            0.663450157224842,
+            1.0
+          ]
+        ],
+        "rows": 253,
+        "as_of": "2025-12-31",
+        "window_start": "2025-01-13",
+        "window_end": "2025-12-31",
+        "return_observations": 252,
+        "annualization": 252,
+        "diagonal_shrinkage": 0.1,
+        "input_sha256": "3c3f0c64ff276e14d3c2bb54e757fabba5ca8e3bd8d8dff1c19b529f90bc9b86"
+      },
+      "paths": 32768,
+      "seed": 1729,
+      "method": "plain Monte Carlo with common normal draws across models",
+      "horizon_trading_days": 21,
+      "confidence": 0.99,
+      "model_specification": {
+        "name": "Two-state common horizon variance mixture",
+        "high_probability": 0.1,
+        "high_variance_multiplier": 4.0,
+        "low_variance_multiplier": 0.6666666666666666,
+        "expected_variance_multiplier": 1.0,
+        "standardized_innovation_kurtosis": 6.0,
+        "terminal_formula": "S_h = S_0 exp((r - V sigma^2/2) h + sigma sqrt(h V) L Z)",
+        "pricing_rule": "Fixed fitted-volatility Black-Scholes for both initial and future book values"
+      },
+      "seed_protocol": "Normal draws: default_rng(seed).standard_normal((paths, 4)); independent regime uniforms: default_rng(SeedSequence(seed, spawn_key=(3103,))).random(paths). Same normals across models; one V shared by all assets in a path.",
+      "rows": [
+        {
+          "name": "gbm",
+          "initial_value": 141.07921246509363,
+          "tail_observations": 328,
+          "var": 242.99339043489587,
+          "es": 278.70692338892843,
+          "pfe": 376.4965003534653,
+          "mean_loss": 0.7415588538858726
+        },
+        {
+          "name": "variance_mixture",
+          "initial_value": 141.07921246509363,
+          "tail_observations": 328,
+          "var": 271.514588792084,
+          "es": 355.3055080378962,
+          "pfe": 424.7513195621494,
+          "mean_loss": 0.25929922393009597
+        }
+      ],
+      "mixture_minus_gbm": {
+        "var": 28.521198357188126,
+        "es": 76.59858464896774,
+        "pfe": 48.25481920868407,
+        "mean_loss": -0.48225962995577665
+      },
+      "paired_runs": [
+        {
+          "seed": 100,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 240.45884847019974,
+            "es": 274.93069620139437,
+            "pfe": 379.5491345317787,
+            "mean_loss": -0.47523691119952755
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 272.7383999000873,
+            "es": 361.26208268573,
+            "pfe": 416.350743303627,
+            "mean_loss": -0.7992889290256584
+          },
+          "difference": {
+            "var": 32.27955142988756,
+            "es": 86.33138648433561,
+            "pfe": 36.801608771848294,
+            "mean_loss": -0.32405201782613086
+          }
+        },
+        {
+          "seed": 101,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 244.26466854970081,
+            "es": 277.22770644696067,
+            "pfe": 381.6094566993314,
+            "mean_loss": 0.3190164689517403
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 273.5008467992357,
+            "es": 369.09711264354064,
+            "pfe": 416.5029766882816,
+            "mean_loss": 0.19374410278968518
+          },
+          "difference": {
+            "var": 29.236178249534902,
+            "es": 91.86940619657997,
+            "pfe": 34.893519988950175,
+            "mean_loss": -0.12527236616205512
+          }
+        },
+        {
+          "seed": 102,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 243.03835580958483,
+            "es": 280.79470578722754,
+            "pfe": 383.0407938349403,
+            "mean_loss": -0.6572389241909734
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 259.9825408324169,
+            "es": 346.1358193315791,
+            "pfe": 412.47740244470936,
+            "mean_loss": -0.9243923232751208
+          },
+          "difference": {
+            "var": 16.944185022832045,
+            "es": 65.34111354435157,
+            "pfe": 29.436608609769053,
+            "mean_loss": -0.26715339908414737
+          }
+        },
+        {
+          "seed": 103,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 242.34613273645977,
+            "es": 276.68324719289654,
+            "pfe": 377.84339582032527,
+            "mean_loss": 0.5905184382063537
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 272.67665042941707,
+            "es": 356.9153004491103,
+            "pfe": 418.72767703360705,
+            "mean_loss": 0.16289255695336152
+          },
+          "difference": {
+            "var": 30.3305176929573,
+            "es": 80.23205325621376,
+            "pfe": 40.88428121328178,
+            "mean_loss": -0.4276258812529922
+          }
+        },
+        {
+          "seed": 104,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 240.94986025340586,
+            "es": 278.398002337659,
+            "pfe": 378.71886972539124,
+            "mean_loss": -0.3771346037568365
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 266.9815026104387,
+            "es": 352.70297007963956,
+            "pfe": 424.10224177444877,
+            "mean_loss": -0.9895112253500196
+          },
+          "difference": {
+            "var": 26.031642357032865,
+            "es": 74.30496774198053,
+            "pfe": 45.38337204905753,
+            "mean_loss": -0.6123766215931831
+          }
+        },
+        {
+          "seed": 105,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 241.1359620240068,
+            "es": 275.90903564894074,
+            "pfe": 376.7542846663954,
+            "mean_loss": -0.21988756928281383
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 272.57423307445225,
+            "es": 361.7519157913097,
+            "pfe": 420.3760616721507,
+            "mean_loss": -0.6842008993120651
+          },
+          "difference": {
+            "var": 31.43827105044545,
+            "es": 85.84288014236898,
+            "pfe": 43.62177700575529,
+            "mean_loss": -0.46431333002925124
+          }
+        },
+        {
+          "seed": 106,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 243.36030806095047,
+            "es": 276.7296166198308,
+            "pfe": 376.63913189321715,
+            "mean_loss": 0.8371062292418766
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 258.55709732934776,
+            "es": 351.73463986130645,
+            "pfe": 411.8610656833138,
+            "mean_loss": 0.2630651803972227
+          },
+          "difference": {
+            "var": 15.196789268397282,
+            "es": 75.00502324147567,
+            "pfe": 35.22193379009667,
+            "mean_loss": -0.5740410488446539
+          }
+        },
+        {
+          "seed": 107,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 236.949906468803,
+            "es": 270.2574170196899,
+            "pfe": 379.37402460190793,
+            "mean_loss": 0.57999393392947
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 262.9446711272776,
+            "es": 349.1301138008064,
+            "pfe": 420.9483468207635,
+            "mean_loss": -0.39038432048653254
+          },
+          "difference": {
+            "var": 25.994764658474622,
+            "es": 78.87269678111647,
+            "pfe": 41.57432221885557,
+            "mean_loss": -0.9703782544160025
+          }
+        },
+        {
+          "seed": 108,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 239.54926427074557,
+            "es": 274.3935948230063,
+            "pfe": 377.4251463278736,
+            "mean_loss": -0.06523477859044524
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 270.9514327039265,
+            "es": 358.7527619139089,
+            "pfe": 424.8971013255652,
+            "mean_loss": -0.6483965765129188
+          },
+          "difference": {
+            "var": 31.402168433180947,
+            "es": 84.35916709090259,
+            "pfe": 47.47195499769157,
+            "mean_loss": -0.5831617979224736
+          }
+        },
+        {
+          "seed": 109,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 247.26992841627043,
+            "es": 283.79484276662185,
+            "pfe": 380.4722538743592,
+            "mean_loss": 0.397293259137687
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 273.9807817372714,
+            "es": 368.8739575853099,
+            "pfe": 417.0088907627469,
+            "mean_loss": 0.021775576283617426
+          },
+          "difference": {
+            "var": 26.710853321000968,
+            "es": 85.07911481868803,
+            "pfe": 36.536636888387704,
+            "mean_loss": -0.37551768285406956
+          }
+        },
+        {
+          "seed": 110,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 243.9533563238222,
+            "es": 278.4389540468383,
+            "pfe": 379.10483500667016,
+            "mean_loss": 1.0692469934320599
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 270.9168646037976,
+            "es": 361.6636292368105,
+            "pfe": 418.1324683911669,
+            "mean_loss": 0.6230978441181946
+          },
+          "difference": {
+            "var": 26.9635082799754,
+            "es": 83.22467518997217,
+            "pfe": 39.02763338449677,
+            "mean_loss": -0.4461491493138653
+          }
+        },
+        {
+          "seed": 111,
+          "gbm": {
+            "name": "gbm",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 242.2734533776891,
+            "es": 277.57384528488336,
+            "pfe": 379.55363183255554,
+            "mean_loss": -0.16681626024636323
+          },
+          "variance_mixture": {
+            "name": "variance_mixture",
+            "initial_value": 141.07921246509363,
+            "tail_observations": 328,
+            "var": 268.34825392505445,
+            "es": 362.42387031098707,
+            "pfe": 415.83816447139856,
+            "mean_loss": -0.3392326199562701
+          },
+          "difference": {
+            "var": 26.074800547365356,
+            "es": 84.85002502610371,
+            "pfe": 36.28453263884302,
+            "mean_loss": -0.17241635970990685
+          }
+        }
+      ],
+      "paired_differences": {
+        "var": {
+          "mean": 26.550269192590395,
+          "standard_deviation": 5.426710809675207,
+          "standard_error_of_mean": 1.5665564733901165
+        },
+        "es": {
+          "mean": 81.27604245950742,
+          "standard_deviation": 7.057432644518803,
+          "standard_error_of_mean": 2.037305318550292
+        },
+        "pfe": {
+          "mean": 38.92818179641945,
+          "standard_deviation": 5.088927953461897,
+          "standard_error_of_mean": 1.4690469619089188
+        },
+        "mean_loss": {
+          "mean": -0.44520482575072756,
+          "standard_deviation": 0.22724964670840112,
+          "standard_error_of_mean": 0.06560132235017137
+        }
+      },
+      "cost": {
+        "book_paths": 851968,
+        "future_option_revaluations": 3407872,
+        "initial_book_valuations": 26,
+        "scope": "Two models at one displayed seed plus twelve paired seeds; excludes calibration, random generation, runtime and quantum oracle costs"
+      },
+      "limitations": [
+        "The variance states and 10% probability are specified sensitivity assumptions, not fitted or selected by held-out performance. Input covariance alone does not identify tail shape.",
+        "E[V]=1 matches innovation covariance; random conditional drift adds a small term to log-return covariance. Conditional drift preserves expected terminal spots. This is a finite Gaussian mixture, not a power-law tail model.",
+        "One common variance state persists over the entire horizon; there is no time evolution, transition estimation, leverage effect or volatility-clustering validation.",
+        "Black-Scholes repricing volatility stays fixed in both models, isolating scenario sensitivity; this is not consistent mixture-model option pricing or a fitted volatility surface.",
+        "Twelve paired seed differences describe numerical variability only, not parameter uncertainty, tail coverage, market accuracy or out-of-sample validation. The 3% drift is illustrative, not fitted physical drift.",
+        "Synthetic bundled prices; no real-world accuracy or quantum advantage is established. Portfolio tail risk remains separate from the bounded quantum oracle."
+      ]
     }
   },
   "provenance": {
