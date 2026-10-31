@@ -124,7 +124,7 @@ def _book_parameters(parameters):
 
 def portfolio_samples(
     paths=4096, seed=1729, method="sobol", horizon=21 / 252, stress=1,
-    parameters=None,
+    parameters=None, scenario_model="gbm",
 ):
     if type(paths) is not int or paths < 2 or not 0 < horizon < 0.5 or not np.isfinite(stress) or stress <= 0:
         raise ValueError(
@@ -132,6 +132,8 @@ def portfolio_samples(
         )
     if method not in {"plain", "antithetic", "sobol"}:
         raise ValueError("Unknown sampling method")
+    if scenario_model not in {"gbm", "variance_mixture"}:
+        raise ValueError("Unknown scenario model")
     n = 4
     spot, vol, correlation = _book_parameters(frozen_parameters() if parameters is None else parameters)
     vol = vol * stress
@@ -151,8 +153,10 @@ def portfolio_samples(
         z = np.concatenate([base, -base])
     else:
         z = np.random.default_rng(seed).standard_normal((paths, n))
+    variance = _scenario_variance(paths, seed, scenario_model, method)[:, None]
     terminal = spot * np.exp(
-        (0.03 - 0.5 * vol**2) * horizon + np.sqrt(horizon) * (z @ factor.T) * vol
+        (0.03 - 0.5 * variance * vol**2) * horizon
+        + np.sqrt(horizon * variance) * (z @ factor.T) * vol
     )
     initial = sum(
         units[j] * option_value(spot[j], strikes[j], vol[j], 0.5, kind=kinds[j])
@@ -165,6 +169,24 @@ def portfolio_samples(
     )
     losses = float(initial) - np.exp(-0.03 * horizon) * future
     return losses, np.maximum(future, 0), float(initial)
+
+
+def _scenario_variance(paths, seed, scenario_model, method="plain"):
+    """One common latent variance per book path, independent of normal shocks.
+
+    E[V]=1: P(V=4)=0.1 and P(V=2/3)=0.9. Conditional GBM drift
+    preserves E[S_h | V]=S_0 exp(r h); this is a horizon mixture, not
+    a fitted volatility process. A separate SeedSequence branch leaves legacy
+    normal draws unchanged. Antithetic partners share their variance state.
+    """
+    if scenario_model == "gbm":
+        return np.ones(paths)
+    if scenario_model != "variance_mixture":
+        raise ValueError("Unknown scenario model")
+    count = paths // 2 if method == "antithetic" else paths
+    rng = np.random.default_rng(np.random.SeedSequence(seed, spawn_key=(3103,)))
+    variance = np.where(rng.random(count) < 0.1, 4.0, 2 / 3)
+    return np.tile(variance, 2) if method == "antithetic" else variance
 
 
 def risk_summary(losses, exposure, confidence=0.99):
@@ -327,6 +349,112 @@ def calibration_case(comparison):
     }
 
 
+def risk_model_comparison(price_csv=None, as_of=None, paths=32768, seed=1729):
+    """Paired model sensitivity at fixed fitted parameters and pricing rule."""
+    bundled = price_csv is None
+    if bundled:
+        price_csv = Path(__file__).resolve().parents[1] / "examples" / "synthetic-prices.csv"
+        as_of = as_of or "2025-12-31"
+    elif as_of is None:
+        raise ValueError("User CSV comparisons require an explicit as_of date")
+    parameters = calibrate_prices(price_csv, as_of)
+    spot, vol, corr = _book_parameters(parameters)
+    parameters.update(assets=["A", "B", "C", "D"], spot=spot.tolist(),
+                      volatility=vol.tolist(), correlation=corr.tolist())
+    models = ("gbm", "variance_mixture")
+
+    def pair(run_seed):
+        rows = []
+        for model in models:
+            losses, exposure, initial = portfolio_samples(
+                paths, seed=run_seed, method="plain", parameters=parameters,
+                scenario_model=model)
+            rows.append({"name": model, "initial_value": initial,
+                         "tail_observations": int(np.sum(losses >= np.quantile(losses, .99))),
+                         **risk_summary(losses, exposure)})
+        return rows
+
+    rows = pair(seed)
+    keys = ("var", "es", "pfe", "mean_loss")
+    runs = []
+    for run_seed in range(100, 112):
+        baseline, mixture = pair(run_seed)
+        runs.append({"seed": run_seed, "gbm": baseline, "variance_mixture": mixture,
+                     "difference": {k: mixture[k] - baseline[k] for k in keys}})
+    paired = {}
+    for key in keys:
+        differences = np.array([r["difference"][key] for r in runs])
+        paired[key] = {"mean": float(differences.mean()),
+                       "standard_deviation": float(differences.std(ddof=1)),
+                       "standard_error_of_mean": float(differences.std(ddof=1) / np.sqrt(len(runs)))}
+    return {
+        "data_source": "Generated synthetic price CSV; no market observations" if bundled else "User-supplied price CSV; provenance and adjustments are the user's responsibility",
+        "as_of": as_of, "parameters": parameters, "paths": paths, "seed": seed,
+        "method": "plain Monte Carlo with common normal draws across models",
+        "horizon_trading_days": 21, "confidence": .99,
+        "model_specification": {
+            "name": "Two-state common horizon variance mixture",
+            "high_probability": .1, "high_variance_multiplier": 4.0,
+            "low_variance_multiplier": 2 / 3, "expected_variance_multiplier": 1.0,
+            "standardized_innovation_kurtosis": 6.0,
+            "terminal_formula": "S_h = S_0 exp((r - V sigma^2/2) h + sigma sqrt(h V) L Z)",
+            "pricing_rule": "Fixed fitted-volatility Black-Scholes for both initial and future book values",
+        },
+        "seed_protocol": "Normal draws: default_rng(seed).standard_normal((paths, 4)); independent regime uniforms: default_rng(SeedSequence(seed, spawn_key=(3103,))).random(paths). Same normals across models; one V shared by all assets in a path.",
+        "rows": rows,
+        "mixture_minus_gbm": {k: rows[1][k] - rows[0][k] for k in keys},
+        "paired_runs": runs, "paired_differences": paired,
+        "cost": {"book_paths": 26 * paths, "future_option_revaluations": 26 * paths * 4,
+                 "initial_book_valuations": 26,
+                 "scope": "Two models at one displayed seed plus twelve paired seeds; excludes calibration, random generation, runtime and quantum oracle costs"},
+        "limitations": [
+            "The variance states and 10% probability are specified sensitivity assumptions, not fitted or selected by held-out performance. Input covariance alone does not identify tail shape.",
+            "E[V]=1 matches innovation covariance; random conditional drift adds a small term to log-return covariance. Conditional drift preserves expected terminal spots. This is a finite Gaussian mixture, not a power-law tail model.",
+            "One common variance state persists over the entire horizon; there is no time evolution, transition estimation, leverage effect or volatility-clustering validation.",
+            "Black-Scholes repricing volatility stays fixed in both models, isolating scenario sensitivity; this is not consistent mixture-model option pricing or a fitted volatility surface.",
+            "Twelve paired seed differences describe numerical variability only, not parameter uncertainty, tail coverage, market accuracy or out-of-sample validation. The 3% drift is illustrative, not fitted physical drift.",
+            "Synthetic bundled prices; no real-world accuracy or quantum advantage is established. Portfolio tail risk remains separate from the bounded quantum oracle.",
+        ],
+    }
+
+
+def risk_model_case(comparison):
+    c = comparison
+    labels = ["Calibrated GBM", "Common variance mixture"]
+    return {
+        "id": "model-risk", "label": "Non-Gaussian model risk",
+        "kicker": "SHARED SEEDS / SCENARIO SENSITIVITY",
+        "title": "What changes when variance is random?",
+        "description": f"As of {c['as_of']}. {c['data_source']}. Fixed fitted parameters and pricing rule; a two-state common variance changes the return distribution.",
+        "metrics": [metric("Mixture 99% VaR", c["rows"][1]["var"], "USD"),
+                    metric("VaR change vs GBM", c["mixture_minus_gbm"]["var"], "USD"),
+                    metric("ES change vs GBM", c["mixture_minus_gbm"]["es"], "USD"),
+                    metric("Paths per model and seed", c["paths"], "paths")],
+        "charts": [
+            {"title": "99% tail risk at the displayed shared seed", "x": labels, "xlabel": "Scenario model / USD",
+             "series": [{"name": k.upper(), "values": [r[k] for r in c["rows"]]} for k in ("var", "es", "pfe")]},
+            {"title": "Mixture minus GBM across twelve shared seeds", "x": [r["seed"] for r in c["paired_runs"]],
+             "xlabel": "Independent seed / difference in USD",
+             "series": [{"name": k.upper(), "values": [r["difference"][k] for r in c["paired_runs"]]} for k in ("var", "es")]}],
+        "table": {"columns": ["Model", "Initial value / USD", "VaR / USD", "ES / USD", "PFE / USD", "Tail observations"],
+                  "rows": [[label, r["initial_value"], r["var"], r["es"], r["pfe"], r["tail_observations"]]
+                           for label, r in zip(labels, c["rows"])]},
+        "method": [
+            "Fit the same CSV covariance and spots as the calibration case. Hold all contracts, horizon, initial value and Black-Scholes repricing inputs fixed across models.",
+            "Independently draw a common variance V: 4 with probability 0.1, otherwise 2/3. E[V]=1; centered standardized innovations have kurtosis 6 versus Gaussian 3. These parameters are specified, not estimated.",
+            "Use conditional GBM drift r - V sigma squared / 2 and shocks sqrt(V) L Z. Expected terminal spots match GBM. The shared state also changes joint tail dependence.",
+            "Use plain Monte Carlo and exactly the same normal draws within each pair. A separate SeedSequence branch supplies independent regime uniforms. Display seed 1729; replicates 100 through 111.",
+            "VaR is the interpolated empirical 99% loss quantile; ES is the mean at or above it. PFE uses positive undiscounted future value. The GBM row uses Monte Carlo and need not equal the calibration case's Sobol row.",
+            *[f"Mixture minus GBM {k.upper()}: paired mean {v['mean']:.4f} USD; numerical SE of the mean {v['standard_error_of_mean']:.4f} USD across twelve seeds."
+              for k, v in c["paired_differences"].items() if k in ("var", "es")],
+            f"Comparison cost: {c['cost']['book_paths']:,} book paths and {c['cost']['future_option_revaluations']:,} future option valuations; excludes RNG, fitting, runtime and quantum costs.",
+        ],
+        "limitations": c["limitations"],
+        "reproduce": "python src/studio.py --out docs/study.json" if c["data_source"].startswith("Generated") else "python src/studio.py --price-csv YOUR.csv --as-of YYYY-MM-DD --out docs/study.json",
+        "comparison": c,
+    }
+
+
 def experiment(price_csv=None, as_of=None):
     cases = []
     for stress, title in [(1, "Base market"), (1.8, "Volatility shock")]:
@@ -466,6 +594,7 @@ def experiment(price_csv=None, as_of=None):
         }
     )
     cases.append(calibration_case(calibrated_comparison(price_csv, as_of)))
+    cases.append(risk_model_case(risk_model_comparison(price_csv, as_of)))
     return {
         "schema_version": 1,
         "slug": "quantum-estimation-lab",
@@ -490,6 +619,10 @@ def experiment(price_csv=None, as_of=None):
             {
                 "title": "Ledoit and Wolf: covariance shrinkage background (fixed 10% diagonal choice used here)",
                 "url": "https://ledoit.net/Honey_2004.pdf",
+            },
+            {
+                "title": "Durham: stochastic volatility mixtures (background; this study uses a specified two-state horizon mixture)",
+                "url": "https://digitalcommons.calpoly.edu/fin_fac/15/",
             },
         ],
         "provenance": "New implementation inspired by the application scope of QStockPrediction. Legacy cases use frozen synthetic parameters; calibration case records its own CSV provenance and dates. Exact CPU statevector experiments. No embedded market dataset or cloud hardware.",

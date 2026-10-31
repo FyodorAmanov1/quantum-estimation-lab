@@ -112,12 +112,33 @@ features even though the synthetic fixture uses Student-t innovations.
 
 The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The explicit quantum oracle is a separate bounded discrete problem. Connecting its encoding to portfolio exposure requires a documented approximation-error budget.
 
+## Non-Gaussian scenario sensitivity
+
+The [non-Gaussian model comparison](QE03.md) adds a fifth studio case. At
+fixed fitted parameters, common normal draws and the same Black–Scholes
+repricing rule, a specified two-state common variance changes 99% VaR from
+242.99 to 271.51 USD and ES from 278.71 to 355.31 USD at seed 1729.
+Across twelve paired seeds, mixture-minus-GBM differences average +26.55 USD
+for VaR and +81.28 USD for ES, with numerical SEs 1.57 and 2.04 USD.
+Mean loss decreases by 0.45 USD across paired means despite increased tail
+risk. The new case uses plain Monte Carlo; its baseline need not equal the
+calibration case's Sobol estimate.
+
+The common variance is 4 with probability 0.1 and 2/3 otherwise. Expected
+variance multiplier is 1 and standardized innovation kurtosis is 6. Conditional
+GBM drift preserves expected terminal spots, while random drift adds a small
+term to total log-return covariance. These are specified sensitivity states,
+not fitted dynamics or a power-law distribution. The fixed pricing rule is
+not a consistent mixture option-pricing model. Shared variance changes joint
+tail dependence; fitted transitions, clustering and held-out validation remain
+outside this comparison. Full run-level evidence and costs are exported.
+
 ## Concepts to explain in an interview
 
 Explain the objective and units, where each baseline obtains its information, what was fixed before evaluation, how costs and uncertainty were measured, and one failure the model cannot capture. Reproduce the data before presenting a number; distinguish an implementation demonstration from a validated research conclusion.
 
 ## Next work
 
-- Compare calibrated Gaussian scenarios against an explicit non-Gaussian return model with out-of-sample validation; covariance fitting alone does not capture tail shape.
+- Validate the specified non-Gaussian comparison on held-out observations and quantify sensitivity to regime assumptions; covariance fitting alone does not identify tail shape.
 - Map a bounded positive-exposure payoff into the oracle and separate discretization, truncation and estimation errors.
 - Measure amplitude-estimator bias and interval coverage across independent trials, including boundary probabilities.
