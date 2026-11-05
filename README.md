@@ -54,8 +54,21 @@ Carlo, so its GBM row differs from the calibration case's Sobol row.
 See [QE03 methods and findings](reports/QE03.md). Both CSV commands below also
 generate this comparison for the supplied history.
 
-The remaining connection is a controlled comparison of tail-estimation error
-and oracle construction cost on the same financial quantity.
+The **Bounded exposure oracle** case now connects the actual option book to
+the quantum estimator. It caps positive future net value at 400 USD and rounds
+down onto 32 exposure levels. With calibrated GBM, the empirical mean is
+145.6810 USD, the exact grid mean is 139.6669 USD and the amplitude estimate is
+138.5031 USD. Signed truncation, grid and amplitude-estimation errors are
+separately recorded: -0.1725, -5.8415 and -1.1638 USD. The specified variance
+mixture has greater cap loss, 1.3641 USD. Cap/grid sensitivity and both direct
+grid and Bernoulli sampling baselines are available in the same case.
+
+This estimates **mean exposure**, not PFE or VaR. Classical preprocessing
+revalues the book and determines the exact encoded expectation before the
+dense quantum simulation runs. The measured amplitude trials are less accurate
+than their classical sampling baselines. No computational advantage follows.
+See [QE04 methods and findings](reports/QE04.md) for the complete error budget,
+independent numerical references, preparation costs and limitations.
 
 ## Run locally
 

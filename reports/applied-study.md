@@ -110,7 +110,7 @@ either command. Historical covariance is a constant pricing/scenario proxy,
 while the drift stays at 3%. The Gaussian scenario model discards non-Gaussian
 features even though the synthetic fixture uses Student-t innovations.
 
-The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The explicit quantum oracle is a separate bounded discrete problem. Connecting its encoding to portfolio exposure requires a documented approximation-error budget.
+The convergence experiment measures mean-loss estimation, while the tail-risk metrics use the full recorded scenario set. The original eight-scenario quantum example remains reproducible. QE04 adds a separate encoding of the actual option book's bounded empirical positive exposure with a documented approximation-error budget.
 
 ## Non-Gaussian scenario sensitivity
 
@@ -137,8 +137,35 @@ outside this comparison. Full run-level evidence and costs are exported.
 
 Explain the objective and units, where each baseline obtains its information, what was fixed before evaluation, how costs and uncertainty were measured, and one failure the model cannot capture. Reproduce the data before presenting a number; distinguish an implementation demonstration from a validated research conclusion.
 
+## Bounded option-book exposure
+
+The [QE04 experiment](QE04.md) adds **Bounded exposure oracle** to the studio.
+It uses the same dated fitted parameters and actual four-contract book under
+GBM and the specified variance mixture. Positive undiscounted net future value
+is capped at 400 USD, then rounded down to 32 nodes, including zero and the cap.
+Empirical bin probabilities and normalized node payoffs enter the existing
+explicit amplitude oracle. Full nodes, counts, probabilities, measurement
+counts and signed errors are exported for replay. User CSV commands feed this
+case as well as calibration and model risk.
+
+For GBM, the 32768-path raw mean is 145.6810 USD. Truncation removes 0.1725 USD
+and grid rounding 5.8415 USD; the exact encoded mean is 139.6669 USD. Amplitude
+estimation gives 138.5031 USD, a further error of -1.1638 USD. Under the mixture,
+raw mean is 146.7929 USD, cap loss 1.3641 USD and grid loss 5.8761 USD; the
+estimate is 138.3389 USD. Larger caps can reduce cap loss while worsening grid
+resolution at fixed register size. Independent numerical references and twelve
+scenario scrambles are reported separately from conditional measurement error.
+
+The exact classical histogram expectation is already known during preparation.
+At 8960 preparation/inverse calls per model the recorded amplitude estimates
+are less accurate against that expectation than either classical sampling
+baseline with 8960 draws. Both conditional likelihood intervals miss their
+exact grid targets in these trials; no coverage study is claimed. This mean
+exposure encoding estimates neither a tail quantile nor counterparty credit
+loss, and supplies no hardware or quantum advantage evidence.
+
 ## Next work
 
 - Validate the specified non-Gaussian comparison on held-out observations and quantify sensitivity to regime assumptions; covariance fitting alone does not identify tail shape.
-- Map a bounded positive-exposure payoff into the oracle and separate discretization, truncation and estimation errors.
+- Develop a coherent scenario/repricing circuit with gate and precision costs; the bounded empirical exposure oracle currently requires classical preprocessing.
 - Measure amplitude-estimator bias and interval coverage across independent trials, including boundary probabilities.
