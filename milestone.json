@@ -1,22 +1,17 @@
 {
-  "task_id": "QE03",
+  "task_id": "QE04",
   "status": "completed",
-  "summary": "Added a specified two-state common stochastic variance scenario and compared its 99% VaR/ES with calibrated GBM using identical normal draws and fixed Black-Scholes repricing. The studio and lab export full paired evidence from synthetic prices: twelve seeds give mean VaR/ES increases of 26.5503/81.2760 USD with numerical SEs 1.5666/2.0373 USD. Includes explicit variance normalization, model limitations, costs and dated user-CSV support. Existing public defaults and four prior cases are preserved; twenty tests pass and five studio cases reproduce. This measures model sensitivity without claiming market accuracy or quantum advantage.",
+  "summary": "Encoded the actual CSV-calibrated option book's bounded positive-exposure grid in the existing amplitude oracle. Measured separate truncation, grid and amplitude-estimation errors under GBM and the specified variance mixture, with cap/grid sensitivity, exact and sampled classical baselines, independent numerical references and twelve scenario replicates. The studio exposes the comparison. Grid rounding dominates default cap loss. Both recorded amplitude trials are less accurate than both classical sampling baselines and both conditional intervals miss the grid target. No population accuracy or quantum advantage is claimed.",
   "evidence_paths": [
-    "lab.py",
     "src/studio.py",
-    "src/common.py",
-    "tests/test_calibration.py",
-    "tests/test_lab.py",
-    "tests/test_model_risk.py",
-    "examples/generate_prices.py",
-    "examples/synthetic-prices.csv",
+    "lab.py",
+    "tests/test_exposure.py",
     "results/latest.json",
     "docs/study.json",
-    "reports/QE03.md",
+    "reports/QE04.md",
+    "reports/QE04-validation.json",
     "reports/applied-study.md",
     "README.md",
-    "REFERENCES.md",
-    "reports/QE03-validation.json"
+    "REFERENCES.md"
   ]
 }

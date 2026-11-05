@@ -1,0 +1,35 @@
+{
+  "task_id": "QE04",
+  "unit_tests": {
+    "command": "python -m unittest discover -s tests -v",
+    "tests_passed": 26,
+    "coverage": "Grid atom counts and error identity; rounding bound; explicit unitary amplification including zero and full amplitudes; invalid inputs; actual book replay; complete error decomposition; query accounting; user CSV cutoff; legacy suites"
+  },
+  "legacy_cases": {
+    "comparison": "Compared complete preexisting case objects with freshly computed case objects before regenerating the studio artifact",
+    "preserved": [
+      "risk-1",
+      "risk-1.8",
+      "amplitude",
+      "calibration",
+      "model-risk"
+    ]
+  },
+  "artifact_regeneration": {
+    "commands": [
+      "python lab.py --output results/latest.json",
+      "python src/studio.py --out docs/study.json"
+    ],
+    "status": "passed"
+  },
+  "studio_reproduction": {
+    "command": "python src/studio.py --check docs/study.json",
+    "cases_reproduced": 6,
+    "status": "passed"
+  },
+  "trusted_contract": {
+    "command": "python quality/contract.py --project . --name quantum-estimation-lab --task-id QE04",
+    "independent_checks": "passed",
+    "metrics_reproduced": true
+  }
+}

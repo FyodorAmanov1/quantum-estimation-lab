@@ -15249,6 +15249,866 @@
         "Twelve paired seed differences describe numerical variability only, not parameter uncertainty, tail coverage, market accuracy or out-of-sample validation. The 3% drift is illustrative, not fitted physical drift.",
         "Synthetic bundled prices; no real-world accuracy or quantum advantage is established. Portfolio tail risk remains separate from the bounded quantum oracle."
       ]
+    },
+    "bounded_exposure": {
+      "data_source": "Generated synthetic price CSV; no market observations",
+      "as_of": "2025-12-31",
+      "parameters": {
+        "assets": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "spot": [
+          56.8648928179,
+          68.9938053265,
+          78.6848284613,
+          34.7574135164
+        ],
+        "volatility": [
+          0.2800359133777453,
+          0.19804863505839465,
+          0.27105601152701275,
+          0.39791571376897866
+        ],
+        "correlation": [
+          [
+            1.0,
+            0.5751340668997103,
+            0.4321746418834592,
+            0.2812002385584247
+          ],
+          [
+            0.5751340668997103,
+            1.0,
+            0.6166059824918856,
+            0.4315609909517616
+          ],
+          [
+            0.4321746418834592,
+            0.6166059824918856,
+            1.0000000000000002,
+            0.663450157224842
+          ],
+          [
+            0.2812002385584247,
+            0.4315609909517616,
+            0.663450157224842,
+            1.0
+          ]
+        ],
+        "rows": 253,
+        "as_of": "2025-12-31",
+        "window_start": "2025-01-13",
+        "window_end": "2025-12-31",
+        "return_observations": 252,
+        "annualization": 252,
+        "diagonal_shrinkage": 0.1,
+        "input_sha256": "3c3f0c64ff276e14d3c2bb54e757fabba5ca8e3bd8d8dff1c19b529f90bc9b86"
+      },
+      "paths": 32768,
+      "seed": 1729,
+      "method": "scrambled Sobol normals; mixture uses independent pseudorandom regimes",
+      "quantity": "Mean positive undiscounted future net book value, USD, at 21/252 years; not PFE, VaR or CVA",
+      "error_identity": "estimate - empirical mean = truncation + grid + amplitude-estimation error; add empirical mean - independent reference for reference difference",
+      "measurement_protocol": "Existing maximum-likelihood estimator: powers 0,1,2,4,8; 256 shots each; measurement seed equals display seed. Direct baselines use SeedSequence(seed, spawn_key=(404,)), Bernoulli then grid draws. The amplitude-estimation error includes finite shots and the existing 32769-point theta likelihood search; it is signed realized error, not an RMSE.",
+      "rows": [
+        {
+          "model": "gbm",
+          "grid": {
+            "cap_usd": 400.0,
+            "levels": 32,
+            "spacing_usd": 12.903225806451612,
+            "nodes_usd": [
+              0.0,
+              12.903225806451612,
+              25.806451612903224,
+              38.70967741935483,
+              51.61290322580645,
+              64.51612903225806,
+              77.41935483870967,
+              90.32258064516128,
+              103.2258064516129,
+              116.12903225806451,
+              129.03225806451613,
+              141.93548387096774,
+              154.83870967741933,
+              167.74193548387095,
+              180.64516129032256,
+              193.54838709677418,
+              206.4516129032258,
+              219.3548387096774,
+              232.25806451612902,
+              245.16129032258064,
+              258.06451612903226,
+              270.96774193548384,
+              283.8709677419355,
+              296.7741935483871,
+              309.67741935483866,
+              322.5806451612903,
+              335.4838709677419,
+              348.38709677419354,
+              361.2903225806451,
+              374.19354838709677,
+              387.09677419354836,
+              400.0
+            ],
+            "counts": [
+              3600,
+              815,
+              926,
+              1045,
+              1199,
+              1277,
+              1370,
+              1443,
+              1566,
+              1589,
+              1578,
+              1563,
+              1613,
+              1533,
+              1488,
+              1383,
+              1236,
+              1182,
+              1083,
+              900,
+              873,
+              734,
+              547,
+              494,
+              397,
+              331,
+              266,
+              204,
+              160,
+              104,
+              77,
+              192
+            ],
+            "probabilities": [
+              0.10986328125,
+              0.024871826171875,
+              0.02825927734375,
+              0.031890869140625,
+              0.036590576171875,
+              0.038970947265625,
+              0.04180908203125,
+              0.044036865234375,
+              0.04779052734375,
+              0.048492431640625,
+              0.04815673828125,
+              0.047698974609375,
+              0.049224853515625,
+              0.046783447265625,
+              0.04541015625,
+              0.042205810546875,
+              0.0377197265625,
+              0.03607177734375,
+              0.033050537109375,
+              0.0274658203125,
+              0.026641845703125,
+              0.02239990234375,
+              0.016693115234375,
+              0.01507568359375,
+              0.012115478515625,
+              0.010101318359375,
+              0.00811767578125,
+              0.0062255859375,
+              0.0048828125,
+              0.003173828125,
+              0.002349853515625,
+              0.005859375
+            ],
+            "normalized_payoff": [
+              0.0,
+              0.03225806451612903,
+              0.06451612903225806,
+              0.09677419354838708,
+              0.12903225806451613,
+              0.16129032258064516,
+              0.19354838709677416,
+              0.2258064516129032,
+              0.25806451612903225,
+              0.29032258064516125,
+              0.3225806451612903,
+              0.3548387096774194,
+              0.3870967741935483,
+              0.4193548387096774,
+              0.4516129032258064,
+              0.48387096774193544,
+              0.5161290322580645,
+              0.5483870967741935,
+              0.5806451612903225,
+              0.6129032258064516,
+              0.6451612903225806,
+              0.6774193548387096,
+              0.7096774193548387,
+              0.7419354838709676,
+              0.7741935483870966,
+              0.8064516129032258,
+              0.8387096774193548,
+              0.8709677419354839,
+              0.9032258064516128,
+              0.9354838709677419,
+              0.9677419354838709,
+              1.0
+            ],
+            "uncapped_mean_usd": 145.6809676842581,
+            "capped_mean_usd": 145.50844741389952,
+            "grid_mean_usd": 139.6669449344758,
+            "amplitude": 0.3491673623361895,
+            "truncation_error_usd": -0.1725202703585751,
+            "grid_error_usd": -5.841502479423724,
+            "tail_excess_mean_usd": 0.17252027035857787,
+            "fraction_above_cap": 0.005859375
+          },
+          "amplitude_estimation": {
+            "estimate": 0.34625781600879857,
+            "interval": [
+              0.3432503603266753,
+              0.3491343132273157
+            ],
+            "queries": 8960,
+            "counts": [
+              {
+                "grover_power": 0,
+                "successes": 88,
+                "shots": 256
+              },
+              {
+                "grover_power": 1,
+                "successes": 233,
+                "shots": 256
+              },
+              {
+                "grover_power": 2,
+                "successes": 0,
+                "shots": 256
+              },
+              {
+                "grover_power": 4,
+                "successes": 90,
+                "shots": 256
+              },
+              {
+                "grover_power": 8,
+                "successes": 235,
+                "shots": 256
+              }
+            ]
+          },
+          "estimate_usd": 138.50312640351942,
+          "conditional_interval_usd": [
+            137.3001441306701,
+            139.65372529092627
+          ],
+          "amplitude_estimation_error_usd": -1.1638185309563767,
+          "total_error_vs_empirical_usd": -7.177841280738676,
+          "independent_reference_mean_usd": 145.67914083668788,
+          "scenario_reference_difference_usd": 0.0018268475702143405,
+          "total_difference_vs_reference_usd": -7.176014433168461,
+          "scenario_runs": [
+            {
+              "seed": 100,
+              "uncapped_mean_usd": 145.68826071735626,
+              "capped_mean_usd": 145.51005932712414,
+              "grid_mean_usd": 139.68033329133064,
+              "truncation_error_usd": -0.17820139023211823,
+              "grid_error_usd": -5.829726035793499
+            },
+            {
+              "seed": 101,
+              "uncapped_mean_usd": 145.6829661576527,
+              "capped_mean_usd": 145.50622616318333,
+              "grid_mean_usd": 139.6673387096774,
+              "truncation_error_usd": -0.17673999446935795,
+              "grid_error_usd": -5.838887453505919
+            },
+            {
+              "seed": 102,
+              "uncapped_mean_usd": 145.69135432149795,
+              "capped_mean_usd": 145.51481351180598,
+              "grid_mean_usd": 139.64528729838707,
+              "truncation_error_usd": -0.1765408096919714,
+              "grid_error_usd": -5.869526213418908
+            },
+            {
+              "seed": 103,
+              "uncapped_mean_usd": 145.67804151661383,
+              "capped_mean_usd": 145.50587943660557,
+              "grid_mean_usd": 139.64922505040323,
+              "truncation_error_usd": -0.17216208000826327,
+              "grid_error_usd": -5.856654386202337
+            },
+            {
+              "seed": 104,
+              "uncapped_mean_usd": 145.67666913930563,
+              "capped_mean_usd": 145.50424127234533,
+              "grid_mean_usd": 139.68939012096774,
+              "truncation_error_usd": -0.1724278669603052,
+              "grid_error_usd": -5.814851151377582
+            },
+            {
+              "seed": 105,
+              "uncapped_mean_usd": 145.6769163579548,
+              "capped_mean_usd": 145.50539558211824,
+              "grid_mean_usd": 139.64528729838707,
+              "truncation_error_usd": -0.17152077583656933,
+              "grid_error_usd": -5.860108283731165
+            },
+            {
+              "seed": 106,
+              "uncapped_mean_usd": 145.68276387399348,
+              "capped_mean_usd": 145.50685173958982,
+              "grid_mean_usd": 139.69687184979838,
+              "truncation_error_usd": -0.17591213440366005,
+              "grid_error_usd": -5.809979889791435
+            },
+            {
+              "seed": 107,
+              "uncapped_mean_usd": 145.67745589362517,
+              "capped_mean_usd": 145.50024314558925,
+              "grid_mean_usd": 139.6858461441532,
+              "truncation_error_usd": -0.17721274803591314,
+              "grid_error_usd": -5.814397001436049
+            },
+            {
+              "seed": 108,
+              "uncapped_mean_usd": 145.67802671618904,
+              "capped_mean_usd": 145.50389999909325,
+              "grid_mean_usd": 139.69254032258064,
+              "truncation_error_usd": -0.1741267170957883,
+              "grid_error_usd": -5.811359676512609
+            },
+            {
+              "seed": 109,
+              "uncapped_mean_usd": 145.6852272029501,
+              "capped_mean_usd": 145.5125134737803,
+              "grid_mean_usd": 139.72443611391128,
+              "truncation_error_usd": -0.1727137291698,
+              "grid_error_usd": -5.788077359869021
+            },
+            {
+              "seed": 110,
+              "uncapped_mean_usd": 145.66585606734867,
+              "capped_mean_usd": 145.5007158717916,
+              "grid_mean_usd": 139.66379473286287,
+              "truncation_error_usd": -0.16514019555705772,
+              "grid_error_usd": -5.836921138928744
+            },
+            {
+              "seed": 111,
+              "uncapped_mean_usd": 145.67524221811945,
+              "capped_mean_usd": 145.50801567708046,
+              "grid_mean_usd": 139.6732453377016,
+              "truncation_error_usd": -0.1672265410389855,
+              "grid_error_usd": -5.834770339378878
+            }
+          ],
+          "uncapped_mean_sd_across_scrambles_usd": 0.006730457211149297,
+          "sensitivity": [
+            {
+              "cap_usd": 200.0,
+              "levels": 16,
+              "spacing_usd": 13.333333333333334,
+              "grid_mean_usd": 122.81005859375001,
+              "truncation_error_usd": -18.691508511653197,
+              "grid_error_usd": -4.179400578854882,
+              "fraction_above_cap": 0.288726806640625
+            },
+            {
+              "cap_usd": 200.0,
+              "levels": 32,
+              "spacing_usd": 6.451612903225806,
+              "grid_mean_usd": 124.98090190272177,
+              "truncation_error_usd": -18.691508511653197,
+              "grid_error_usd": -2.008557269883127,
+              "fraction_above_cap": 0.288726806640625
+            },
+            {
+              "cap_usd": 200.0,
+              "levels": 64,
+              "spacing_usd": 3.1746031746031744,
+              "grid_mean_usd": 125.99681067088295,
+              "truncation_error_usd": -18.691508511653197,
+              "grid_error_usd": -0.9926485017219449,
+              "fraction_above_cap": 0.288726806640625
+            },
+            {
+              "cap_usd": 400.0,
+              "levels": 16,
+              "spacing_usd": 26.666666666666668,
+              "grid_mean_usd": 133.55387369791669,
+              "truncation_error_usd": -0.1725202703585751,
+              "grid_error_usd": -11.954573715982832,
+              "fraction_above_cap": 0.005859375
+            },
+            {
+              "cap_usd": 400.0,
+              "levels": 32,
+              "spacing_usd": 12.903225806451612,
+              "grid_mean_usd": 139.6669449344758,
+              "truncation_error_usd": -0.1725202703585751,
+              "grid_error_usd": -5.841502479423724,
+              "fraction_above_cap": 0.005859375
+            },
+            {
+              "cap_usd": 400.0,
+              "levels": 64,
+              "spacing_usd": 6.349206349206349,
+              "grid_mean_usd": 142.64129154265873,
+              "truncation_error_usd": -0.1725202703585751,
+              "grid_error_usd": -2.867155871240783,
+              "fraction_above_cap": 0.005859375
+            },
+            {
+              "cap_usd": 800.0,
+              "levels": 16,
+              "spacing_usd": 53.333333333333336,
+              "grid_mean_usd": 121.82454427083334,
+              "truncation_error_usd": 0.0,
+              "grid_error_usd": -23.85642341342475,
+              "fraction_above_cap": 0.0
+            },
+            {
+              "cap_usd": 800.0,
+              "levels": 32,
+              "spacing_usd": 25.806451612903224,
+              "grid_mean_usd": 134.0087890625,
+              "truncation_error_usd": 0.0,
+              "grid_error_usd": -11.672178621758093,
+              "fraction_above_cap": 0.0
+            },
+            {
+              "cap_usd": 800.0,
+              "levels": 64,
+              "spacing_usd": 12.698412698412698,
+              "grid_mean_usd": 139.91776723710316,
+              "truncation_error_usd": 0.0,
+              "grid_error_usd": -5.763200447154929,
+              "fraction_above_cap": 0.0
+            }
+          ],
+          "classical": {
+            "exact_empirical_grid_mean_usd": 139.6669449344758,
+            "bernoulli_estimate_usd": 139.41964285714286,
+            "bernoulli_error_usd": -0.2473020773329324,
+            "direct_grid_estimate_usd": 139.44412442396316,
+            "direct_grid_error_usd": -0.22282051051263352,
+            "direct_grid_standard_error_usd": 1.004117345329292,
+            "draws_per_method": 8960
+          }
+        },
+        {
+          "model": "variance_mixture",
+          "grid": {
+            "cap_usd": 400.0,
+            "levels": 32,
+            "spacing_usd": 12.903225806451612,
+            "nodes_usd": [
+              0.0,
+              12.903225806451612,
+              25.806451612903224,
+              38.70967741935483,
+              51.61290322580645,
+              64.51612903225806,
+              77.41935483870967,
+              90.32258064516128,
+              103.2258064516129,
+              116.12903225806451,
+              129.03225806451613,
+              141.93548387096774,
+              154.83870967741933,
+              167.74193548387095,
+              180.64516129032256,
+              193.54838709677418,
+              206.4516129032258,
+              219.3548387096774,
+              232.25806451612902,
+              245.16129032258064,
+              258.06451612903226,
+              270.96774193548384,
+              283.8709677419355,
+              296.7741935483871,
+              309.67741935483866,
+              322.5806451612903,
+              335.4838709677419,
+              348.38709677419354,
+              361.2903225806451,
+              374.19354838709677,
+              387.09677419354836,
+              400.0
+            ],
+            "counts": [
+              2843,
+              722,
+              854,
+              1010,
+              1167,
+              1342,
+              1465,
+              1644,
+              1716,
+              1820,
+              1844,
+              1829,
+              1829,
+              1756,
+              1602,
+              1390,
+              1357,
+              1135,
+              1041,
+              872,
+              653,
+              585,
+              468,
+              366,
+              275,
+              222,
+              147,
+              123,
+              102,
+              94,
+              52,
+              443
+            ],
+            "probabilities": [
+              0.086761474609375,
+              0.02203369140625,
+              0.02606201171875,
+              0.03082275390625,
+              0.035614013671875,
+              0.04095458984375,
+              0.044708251953125,
+              0.0501708984375,
+              0.0523681640625,
+              0.0555419921875,
+              0.0562744140625,
+              0.055816650390625,
+              0.055816650390625,
+              0.0535888671875,
+              0.04888916015625,
+              0.04241943359375,
+              0.041412353515625,
+              0.034637451171875,
+              0.031768798828125,
+              0.026611328125,
+              0.019927978515625,
+              0.017852783203125,
+              0.0142822265625,
+              0.01116943359375,
+              0.008392333984375,
+              0.00677490234375,
+              0.004486083984375,
+              0.003753662109375,
+              0.00311279296875,
+              0.00286865234375,
+              0.0015869140625,
+              0.013519287109375
+            ],
+            "normalized_payoff": [
+              0.0,
+              0.03225806451612903,
+              0.06451612903225806,
+              0.09677419354838708,
+              0.12903225806451613,
+              0.16129032258064516,
+              0.19354838709677416,
+              0.2258064516129032,
+              0.25806451612903225,
+              0.29032258064516125,
+              0.3225806451612903,
+              0.3548387096774194,
+              0.3870967741935483,
+              0.4193548387096774,
+              0.4516129032258064,
+              0.48387096774193544,
+              0.5161290322580645,
+              0.5483870967741935,
+              0.5806451612903225,
+              0.6129032258064516,
+              0.6451612903225806,
+              0.6774193548387096,
+              0.7096774193548387,
+              0.7419354838709676,
+              0.7741935483870966,
+              0.8064516129032258,
+              0.8387096774193548,
+              0.8709677419354839,
+              0.9032258064516128,
+              0.9354838709677419,
+              0.9677419354838709,
+              1.0
+            ],
+            "uncapped_mean_usd": 146.7929064396465,
+            "capped_mean_usd": 145.42880474584854,
+            "grid_mean_usd": 139.55275012600805,
+            "amplitude": 0.34888187531502013,
+            "truncation_error_usd": -1.3641016937979487,
+            "grid_error_usd": -5.876054619840488,
+            "tail_excess_mean_usd": 1.3641016937979498,
+            "fraction_above_cap": 0.013519287109375
+          },
+          "amplitude_estimation": {
+            "estimate": 0.345847343252629,
+            "interval": [
+              0.34288624432668957,
+              0.34876873647433065
+            ],
+            "queries": 8960,
+            "counts": [
+              {
+                "grover_power": 0,
+                "successes": 88,
+                "shots": 256
+              },
+              {
+                "grover_power": 1,
+                "successes": 233,
+                "shots": 256
+              },
+              {
+                "grover_power": 2,
+                "successes": 0,
+                "shots": 256
+              },
+              {
+                "grover_power": 4,
+                "successes": 91,
+                "shots": 256
+              },
+              {
+                "grover_power": 8,
+                "successes": 234,
+                "shots": 256
+              }
+            ]
+          },
+          "estimate_usd": 138.3389373010516,
+          "conditional_interval_usd": [
+            137.1544977306758,
+            139.50749458973226
+          ],
+          "amplitude_estimation_error_usd": -1.2138128249564488,
+          "total_error_vs_empirical_usd": -8.453969138594886,
+          "independent_reference_mean_usd": 146.5450682967447,
+          "scenario_reference_difference_usd": 0.24783814290179862,
+          "total_difference_vs_reference_usd": -8.206130995693087,
+          "scenario_runs": [
+            {
+              "seed": 100,
+              "uncapped_mean_usd": 146.57268616662662,
+              "capped_mean_usd": 145.33605232782512,
+              "grid_mean_usd": 139.4287109375,
+              "truncation_error_usd": -1.2366338388015095,
+              "grid_error_usd": -5.907341390325115
+            },
+            {
+              "seed": 101,
+              "uncapped_mean_usd": 146.55240444298695,
+              "capped_mean_usd": 145.31918288886777,
+              "grid_mean_usd": 139.40980972782256,
+              "truncation_error_usd": -1.2332215541191829,
+              "grid_error_usd": -5.90937316104521
+            },
+            {
+              "seed": 102,
+              "uncapped_mean_usd": 146.69157043802227,
+              "capped_mean_usd": 145.34369328379708,
+              "grid_mean_usd": 139.41807900705643,
+              "truncation_error_usd": -1.3478771542251877,
+              "grid_error_usd": -5.925614276740646
+            },
+            {
+              "seed": 103,
+              "uncapped_mean_usd": 146.45686194562626,
+              "capped_mean_usd": 145.15333744670875,
+              "grid_mean_usd": 139.28931451612902,
+              "truncation_error_usd": -1.3035244989175112,
+              "grid_error_usd": -5.864022930579722
+            },
+            {
+              "seed": 104,
+              "uncapped_mean_usd": 146.3006136744996,
+              "capped_mean_usd": 145.11835340558667,
+              "grid_mean_usd": 139.1790574596774,
+              "truncation_error_usd": -1.182260268912927,
+              "grid_error_usd": -5.939295945909265
+            },
+            {
+              "seed": 105,
+              "uncapped_mean_usd": 146.51248481978774,
+              "capped_mean_usd": 145.31787024322185,
+              "grid_mean_usd": 139.40744707661287,
+              "truncation_error_usd": -1.1946145765658969,
+              "grid_error_usd": -5.910423166608979
+            },
+            {
+              "seed": 106,
+              "uncapped_mean_usd": 146.2755155705291,
+              "capped_mean_usd": 145.03883081282757,
+              "grid_mean_usd": 139.14716166834677,
+              "truncation_error_usd": -1.2366847577015392,
+              "grid_error_usd": -5.891669144480801
+            },
+            {
+              "seed": 107,
+              "uncapped_mean_usd": 146.3776765545558,
+              "capped_mean_usd": 145.106639080606,
+              "grid_mean_usd": 139.18653918850805,
+              "truncation_error_usd": -1.2710374739498036,
+              "grid_error_usd": -5.920099892097937
+            },
+            {
+              "seed": 108,
+              "uncapped_mean_usd": 146.18863752003637,
+              "capped_mean_usd": 145.0388783614446,
+              "grid_mean_usd": 139.14676789314515,
+              "truncation_error_usd": -1.1497591585917633,
+              "grid_error_usd": -5.89211046829945
+            },
+            {
+              "seed": 109,
+              "uncapped_mean_usd": 146.3487014254577,
+              "capped_mean_usd": 145.11498660484511,
+              "grid_mean_usd": 139.24757434475805,
+              "truncation_error_usd": -1.2337148206125903,
+              "grid_error_usd": -5.867412260087065
+            },
+            {
+              "seed": 110,
+              "uncapped_mean_usd": 146.37450705089535,
+              "capped_mean_usd": 145.20616778988116,
+              "grid_mean_usd": 139.29640246975805,
+              "truncation_error_usd": -1.1683392610141823,
+              "grid_error_usd": -5.909765320123114
+            },
+            {
+              "seed": 111,
+              "uncapped_mean_usd": 146.3945503425876,
+              "capped_mean_usd": 145.1242175204864,
+              "grid_mean_usd": 139.22827935987902,
+              "truncation_error_usd": -1.2703328221011816,
+              "grid_error_usd": -5.895938160607386
+            }
+          ],
+          "uncapped_mean_sd_across_scrambles_usd": 0.14230346337338098,
+          "sensitivity": [
+            {
+              "cap_usd": 200.0,
+              "levels": 16,
+              "spacing_usd": 13.333333333333334,
+              "grid_mean_usd": 124.69807942708334,
+              "truncation_error_usd": -17.638827144241162,
+              "grid_error_usd": -4.455999868321982,
+              "fraction_above_cap": 0.262451171875
+            },
+            {
+              "cap_usd": 200.0,
+              "levels": 32,
+              "spacing_usd": 6.451612903225806,
+              "grid_mean_usd": 126.98718655493951,
+              "truncation_error_usd": -17.638827144241162,
+              "grid_error_usd": -2.166892740465812,
+              "fraction_above_cap": 0.262451171875
+            },
+            {
+              "cap_usd": 200.0,
+              "levels": 64,
+              "spacing_usd": 3.1746031746031744,
+              "grid_mean_usd": 128.09273856026786,
+              "truncation_error_usd": -17.638827144241162,
+              "grid_error_usd": -1.0613407351374633,
+              "fraction_above_cap": 0.262451171875
+            },
+            {
+              "cap_usd": 400.0,
+              "levels": 16,
+              "spacing_usd": 26.666666666666668,
+              "grid_mean_usd": 133.23893229166669,
+              "truncation_error_usd": -1.3641016937979487,
+              "grid_error_usd": -12.189872454181852,
+              "fraction_above_cap": 0.013519287109375
+            },
+            {
+              "cap_usd": 400.0,
+              "levels": 32,
+              "spacing_usd": 12.903225806451612,
+              "grid_mean_usd": 139.55275012600805,
+              "truncation_error_usd": -1.3641016937979487,
+              "grid_error_usd": -5.876054619840488,
+              "fraction_above_cap": 0.013519287109375
+            },
+            {
+              "cap_usd": 400.0,
+              "levels": 64,
+              "spacing_usd": 6.349206349206349,
+              "grid_mean_usd": 142.5289093501984,
+              "truncation_error_usd": -1.3641016937979487,
+              "grid_error_usd": -2.899895395650134,
+              "fraction_above_cap": 0.013519287109375
+            },
+            {
+              "cap_usd": 800.0,
+              "levels": 16,
+              "spacing_usd": 53.333333333333336,
+              "grid_mean_usd": 122.27864583333334,
+              "truncation_error_usd": -0.03268092939262601,
+              "grid_error_usd": -24.481579676920518,
+              "fraction_above_cap": 0.000335693359375
+            },
+            {
+              "cap_usd": 800.0,
+              "levels": 32,
+              "spacing_usd": 25.806451612903224,
+              "grid_mean_usd": 134.84201738911287,
+              "truncation_error_usd": -0.03268092939262601,
+              "grid_error_usd": -11.918208121140992,
+              "fraction_above_cap": 0.000335693359375
+            },
+            {
+              "cap_usd": 800.0,
+              "levels": 64,
+              "spacing_usd": 12.698412698412698,
+              "grid_mean_usd": 140.8776661706349,
+              "truncation_error_usd": -0.03268092939262601,
+              "grid_error_usd": -5.88255933961895,
+              "fraction_above_cap": 0.000335693359375
+            }
+          ],
+          "classical": {
+            "exact_empirical_grid_mean_usd": 139.55275012600805,
+            "bernoulli_estimate_usd": 139.33035714285717,
+            "bernoulli_error_usd": -0.22239298315088263,
+            "direct_grid_estimate_usd": 139.31883640552996,
+            "direct_grid_error_usd": -0.23391372047808545,
+            "direct_grid_standard_error_usd": 0.9526700826382671,
+            "draws_per_method": 8960
+          }
+        }
+      ],
+      "costs": {
+        "scenario_book_paths": 1114112,
+        "future_option_revaluations": 4456448,
+        "initial_book_valuations": 28,
+        "grid_levels": 32,
+        "logical_qubits": 6,
+        "dense_matrix_dimension": 64,
+        "preparation_or_inverse_calls_per_model": 8960,
+        "measurement_shots_per_model": 1280,
+        "description": "Precompute four option values per path, then O(paths) histogram for each cap/grid. Dense Householder preparation and Grover matrices; query counts exclude classical preprocessing, gates, inference, memory and runtime. Classical exact histogram expectation is already available; equal calls/draws do not imply equal runtime."
+      },
+      "limitations": [
+        "The oracle represents a finite empirical exposure law, not the continuous scenario distribution. Its probabilities require classical book revaluation first; no efficient coherent pricing circuit is supplied.",
+        "Capping and floor rounding bias the mean down. Measured tail excess is empirical, not a bound on the population tail. Grid rounding is bounded by cap/(levels-1) for any exposure distribution.",
+        "The independent high-budget mean is also numerical. Twelve scrambles measure scenario variability, not parameter or model uncertainty; the mixture regimes are pseudorandom.",
+        "The likelihood interval is conditional on the encoded grid only; it excludes cap, grid and scenario errors and has no tested coverage guarantee here. One measurement trial per model cannot establish estimator superiority.",
+        "Synthetic inputs, historical-volatility pricing proxy and specified mixture assumptions do not establish market accuracy. No quantum advantage, default exposure or hardware performance is claimed."
+      ]
     }
   },
   "provenance": {
@@ -15262,7 +16122,7 @@
     "Normal approximation confidence intervals, not finite-sample guarantees.",
     "Coverage and RMSE have sampling uncertainty across a finite set of seeds; no calibration or monotonic convergence guarantee.",
     "One synthetic option parameter setting; equal payoff counts do not establish a runtime speedup.",
-    "The call benchmark is classical; the studio's separate discrete quantum example does not estimate portfolio tail risk.",
+    "The bounded exposure oracle estimates an empirical capped/grid mean, not portfolio tail risk; its classical preprocessing already determines the exact grid expectation.",
     "CSV calibration uses constant historical covariance with risk-neutral drift; it does not establish real-world tail accuracy."
   ]
 }

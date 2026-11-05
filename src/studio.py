@@ -262,6 +262,178 @@ def quantum_estimate(state, Q, powers=(0, 1, 2, 4, 8), shots=256, seed=1729):
     }
 
 
+def exposure_grid(exposure, cap=400.0, levels=32):
+    """Push the empirical positive-exposure law onto a bounded USD grid.
+
+    Floor rounding gives 0 <= min(X, cap) - grid(X) <= cap/(levels-1).
+    The final node includes the cap atom; zero is retained, not conditioned away.
+    This compresses already revalued scenarios, not a coherent market-data oracle.
+    """
+    values = np.asarray(exposure, dtype=float)
+    if (values.ndim != 1 or not values.size or not np.isfinite(values).all()
+            or np.any(values < 0)):
+        raise ValueError("Exposure must be a nonempty finite nonnegative vector")
+    if not np.isfinite(cap) or cap <= 0:
+        raise ValueError("Exposure cap must be positive and finite")
+    if type(levels) is not int or levels < 2 or levels & (levels - 1):
+        raise ValueError("Grid levels must be a power of two of at least two")
+    nodes = np.linspace(0, cap, levels)
+    clipped = np.minimum(values, cap)
+    # searchsorted avoids pushing exact grid nodes into a lower cell by division.
+    indices = np.searchsorted(nodes, clipped, side="right") - 1
+    counts = np.bincount(indices, minlength=levels)
+    probabilities = counts / len(values)
+    encoded = float(probabilities @ nodes)
+    raw_mean, capped_mean = float(values.mean()), float(clipped.mean())
+    return {
+        "cap_usd": float(cap), "levels": levels, "spacing_usd": float(cap / (levels - 1)),
+        "nodes_usd": nodes.tolist(), "counts": counts.tolist(),
+        "probabilities": probabilities.tolist(), "normalized_payoff": (nodes / cap).tolist(),
+        "uncapped_mean_usd": raw_mean, "capped_mean_usd": capped_mean,
+        "grid_mean_usd": encoded, "amplitude": encoded / cap,
+        "truncation_error_usd": capped_mean - raw_mean,
+        "grid_error_usd": encoded - capped_mean,
+        "tail_excess_mean_usd": float(np.maximum(values - cap, 0).mean()),
+        "fraction_above_cap": float(np.mean(values > cap)),
+    }
+
+
+def bounded_exposure_comparison(price_csv=None, as_of=None, paths=32768, seed=1729):
+    """Separate empirical cap/grid/measurement errors for the actual option book."""
+    bundled = price_csv is None
+    if bundled:
+        price_csv = Path(__file__).resolve().parents[1] / "examples" / "synthetic-prices.csv"
+        as_of = as_of or "2025-12-31"
+    elif as_of is None:
+        raise ValueError("User CSV comparisons require an explicit as_of date")
+    parameters = calibrate_prices(price_csv, as_of)
+    spot, vol, corr = _book_parameters(parameters)
+    parameters.update(assets=["A", "B", "C", "D"], spot=spot.tolist(),
+                      volatility=vol.tolist(), correlation=corr.tolist())
+    rows = []
+    for model in ("gbm", "variance_mixture"):
+        exposure = portfolio_samples(paths, seed=seed, parameters=parameters,
+                                     scenario_model=model)[1]
+        grid = exposure_grid(exposure)
+        state, Q = amplitude_oracle(grid["probabilities"], grid["normalized_payoff"])
+        ae = quantum_estimate(state, Q, seed=seed)
+        cap = grid["cap_usd"]
+        estimate = cap * ae["estimate"]
+        queries = ae["queries"]
+        rng = np.random.default_rng(np.random.SeedSequence(seed, spawn_key=(404,)))
+        bernoulli = cap * float(rng.binomial(queries, grid["amplitude"]) / queries)
+        direct = np.asarray(grid["nodes_usd"])[rng.choice(
+            grid["levels"], size=queries, p=grid["probabilities"])]
+        # Separate repeated scenario construction from measurement randomness.
+        runs = []
+        for run_seed in range(100, 112):
+            x = portfolio_samples(paths, seed=run_seed, parameters=parameters,
+                                  scenario_model=model)[1]
+            g = exposure_grid(x)
+            runs.append({"seed": run_seed, **{key: g[key] for key in (
+                "uncapped_mean_usd", "capped_mean_usd", "grid_mean_usd",
+                "truncation_error_usd", "grid_error_usd")}})
+        reference_exposure = portfolio_samples(131072, seed=499, parameters=parameters,
+                                               scenario_model=model)[1]
+        reference = float(reference_exposure.mean())
+        sensitivity = []
+        for bound in (200.0, 400.0, 800.0):
+            for levels in (16, 32, 64):
+                g = exposure_grid(exposure, bound, levels)
+                sensitivity.append({key: g[key] for key in (
+                    "cap_usd", "levels", "spacing_usd", "grid_mean_usd",
+                    "truncation_error_usd", "grid_error_usd", "fraction_above_cap")})
+        rows.append({
+            "model": model, "grid": grid, "amplitude_estimation": ae,
+            "estimate_usd": estimate,
+            "conditional_interval_usd": [cap * x for x in ae["interval"]],
+            "amplitude_estimation_error_usd": estimate - grid["grid_mean_usd"],
+            "total_error_vs_empirical_usd": estimate - grid["uncapped_mean_usd"],
+            "independent_reference_mean_usd": reference,
+            "scenario_reference_difference_usd": grid["uncapped_mean_usd"] - reference,
+            "total_difference_vs_reference_usd": estimate - reference,
+            "scenario_runs": runs,
+            "uncapped_mean_sd_across_scrambles_usd": float(np.std(
+                [r["uncapped_mean_usd"] for r in runs], ddof=1)),
+            "sensitivity": sensitivity,
+            "classical": {
+                "exact_empirical_grid_mean_usd": grid["grid_mean_usd"],
+                "bernoulli_estimate_usd": bernoulli,
+                "bernoulli_error_usd": bernoulli - grid["grid_mean_usd"],
+                "direct_grid_estimate_usd": float(direct.mean()),
+                "direct_grid_error_usd": float(direct.mean() - grid["grid_mean_usd"]),
+                "direct_grid_standard_error_usd": float(direct.std(ddof=1) / np.sqrt(queries)),
+                "draws_per_method": queries,
+            },
+        })
+    return {
+        "data_source": "Generated synthetic price CSV; no market observations" if bundled else "User-supplied price CSV",
+        "as_of": as_of, "parameters": parameters, "paths": paths, "seed": seed,
+        "method": "scrambled Sobol normals; mixture uses independent pseudorandom regimes",
+        "quantity": "Mean positive undiscounted future net book value, USD, at 21/252 years; not PFE, VaR or CVA",
+        "error_identity": "estimate - empirical mean = truncation + grid + amplitude-estimation error; add empirical mean - independent reference for reference difference",
+        "measurement_protocol": "Existing maximum-likelihood estimator: powers 0,1,2,4,8; 256 shots each; measurement seed equals display seed. Direct baselines use SeedSequence(seed, spawn_key=(404,)), Bernoulli then grid draws. The amplitude-estimation error includes finite shots and the existing 32769-point theta likelihood search; it is signed realized error, not an RMSE.",
+        "rows": rows,
+        "costs": {
+            "scenario_book_paths": 2 * (13 * paths + 131072),
+            "future_option_revaluations": 8 * (13 * paths + 131072),
+            "initial_book_valuations": 28,
+            "grid_levels": 32, "logical_qubits": 6, "dense_matrix_dimension": 64,
+            "preparation_or_inverse_calls_per_model": rows[0]["amplitude_estimation"]["queries"],
+            "measurement_shots_per_model": 1280,
+            "description": "Precompute four option values per path, then O(paths) histogram for each cap/grid. Dense Householder preparation and Grover matrices; query counts exclude classical preprocessing, gates, inference, memory and runtime. Classical exact histogram expectation is already available; equal calls/draws do not imply equal runtime.",
+        },
+        "limitations": [
+            "The oracle represents a finite empirical exposure law, not the continuous scenario distribution. Its probabilities require classical book revaluation first; no efficient coherent pricing circuit is supplied.",
+            "Capping and floor rounding bias the mean down. Measured tail excess is empirical, not a bound on the population tail. Grid rounding is bounded by cap/(levels-1) for any exposure distribution.",
+            "The independent high-budget mean is also numerical. Twelve scrambles measure scenario variability, not parameter or model uncertainty; the mixture regimes are pseudorandom.",
+            "The likelihood interval is conditional on the encoded grid only; it excludes cap, grid and scenario errors and has no tested coverage guarantee here. One measurement trial per model cannot establish estimator superiority.",
+            "Synthetic inputs, historical-volatility pricing proxy and specified mixture assumptions do not establish market accuracy. No quantum advantage, default exposure or hardware performance is claimed.",
+        ],
+    }
+
+
+def bounded_exposure_case(comparison):
+    c = comparison
+    g = c["rows"][0]["grid"]
+    return {
+        "id": "bounded-exposure", "label": "Bounded exposure oracle",
+        "kicker": "OPTION BOOK / EXPOSURE ERROR BUDGET",
+        "title": "What does a bounded oracle lose?",
+        "description": f"As of {c['as_of']}. {c['data_source']}. Encode the existing net option book's positive future value, with a 400 USD cap and 32 floor-rounded grid levels. Compare GBM with the specified variance mixture.",
+        "metrics": [metric("GBM empirical mean exposure", g["uncapped_mean_usd"], "USD"),
+                    metric("GBM exact grid mean", g["grid_mean_usd"], "USD"),
+                    metric("GBM oracle estimate", c["rows"][0]["estimate_usd"], "USD"),
+                    metric("Preparation calls per model", c["costs"]["preparation_or_inverse_calls_per_model"], "calls")],
+        "charts": [{"title": "Signed errors against the same empirical exposure mean",
+                    "x": ["Truncation", "Grid rounding", "Amplitude estimation", "Total"],
+                    "xlabel": "Error component / USD",
+                    "series": [{"name": r["model"], "values": [r["grid"]["truncation_error_usd"],
+                        r["grid"]["grid_error_usd"], r["amplitude_estimation_error_usd"],
+                        r["total_error_vs_empirical_usd"]]} for r in c["rows"]]},
+                   {"title": "Cap/grid sensitivity: downward approximation error",
+                    "x": [f"{s['cap_usd']:g}/{s['levels']}" for s in c["rows"][0]["sensitivity"]],
+                    "xlabel": "Cap in USD / grid levels",
+                    "series": [{"name": r["model"], "values": [
+                        -(s["truncation_error_usd"] + s["grid_error_usd"]) for s in r["sensitivity"]]}
+                        for r in c["rows"]]}],
+        "table": {"columns": ["Model", "Raw mean / USD", "Capped mean / USD", "Grid mean / USD", "AE / USD", "Direct grid MC / USD", "Bernoulli / USD"],
+                  "rows": [[r["model"], r["grid"]["uncapped_mean_usd"], r["grid"]["capped_mean_usd"],
+                            r["grid"]["grid_mean_usd"], r["estimate_usd"],
+                            r["classical"]["direct_grid_estimate_usd"], r["classical"]["bernoulli_estimate_usd"]] for r in c["rows"]]},
+        "method": [c["quantity"], c["error_identity"],
+                   c["measurement_protocol"],
+                   "X=max(net future value,0); Y=min(X,400); G is Y rounded down to nodes 400*j/31. Encode empirical bin frequencies p_j with ancilla payoff G_j/400. Zero and the cap atom are included. Five register qubits plus one ancilla.",
+                   "Grid error magnitude is at most 400/31 USD; truncation equals minus the sample mean of (X-400)+. Sensitivity uses caps 200/400/800 and 16/32/64 nodes with the same scenarios.",
+                   c["costs"]["description"],
+                   *[f"{r['model']}: independent 131072-path reference {r['independent_reference_mean_usd']:.4f} USD; empirical minus reference {r['scenario_reference_difference_usd']:.4f} USD; SD of raw mean over twelve scrambles {r['uncapped_mean_sd_across_scrambles_usd']:.4f} USD. Conditional likelihood interval {r['conditional_interval_usd'][0]:.4f} to {r['conditional_interval_usd'][1]:.4f} USD."
+                     for r in c["rows"]]],
+        "limitations": c["limitations"],
+        "reproduce": "python src/studio.py --out docs/study.json" if c["data_source"].startswith("Generated") else "python src/studio.py --price-csv YOUR.csv --as-of YYYY-MM-DD --out docs/study.json",
+        "comparison": c,
+    }
+
+
 def calibrated_comparison(price_csv=None, as_of=None, paths=32768, seed=1729):
     """Same book and normal shocks; distinguish spot changes from vol/correlation changes."""
     bundled = price_csv is None
@@ -595,6 +767,7 @@ def experiment(price_csv=None, as_of=None):
     )
     cases.append(calibration_case(calibrated_comparison(price_csv, as_of)))
     cases.append(risk_model_case(risk_model_comparison(price_csv, as_of)))
+    cases.append(bounded_exposure_case(bounded_exposure_comparison(price_csv, as_of)))
     return {
         "schema_version": 1,
         "slug": "quantum-estimation-lab",
@@ -604,6 +777,14 @@ def experiment(price_csv=None, as_of=None):
         "seed": 1729,
         "cases": cases,
         "references": [
+            {
+                "title": "Suzuki et al.: amplitude estimation without phase estimation",
+                "url": "https://arxiv.org/abs/1904.10246",
+            },
+            {
+                "title": "Woerner and Egger: quantum risk analysis (algorithmic background)",
+                "url": "https://arxiv.org/abs/1806.06893",
+            },
             {
                 "title": "Original portfolio PFE project",
                 "url": "https://github.com/FyodorAmanov1/QStockPrediction",

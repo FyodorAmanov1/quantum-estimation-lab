@@ -109,7 +109,7 @@ def convergence_experiment(path_budgets=(256, 1024, 4096, 16384), n_seeds=128, s
 
 
 def experiment(price_csv=None, as_of=None):
-    from src.studio import calibrated_comparison, risk_model_comparison
+    from src.studio import calibrated_comparison, risk_model_comparison, bounded_exposure_comparison
     import scipy
     reference = black_scholes_call()
     plain, anti = monte_carlo(), monte_carlo(antithetic=True)
@@ -117,7 +117,8 @@ def experiment(price_csv=None, as_of=None):
             "metrics": {"analytic_price": reference, "monte_carlo": plain, "antithetic": anti,
                         "convergence": convergence_experiment(),
                         "portfolio_calibration": calibrated_comparison(price_csv, as_of),
-                        "portfolio_model_risk": risk_model_comparison(price_csv, as_of)},
+                        "portfolio_model_risk": risk_model_comparison(price_csv, as_of),
+                        "bounded_exposure": bounded_exposure_comparison(price_csv, as_of)},
             "provenance": {"data": "Call benchmark: synthetic risk-neutral GBM; portfolio comparison records its own dated CSV provenance",
                            "scipy": scipy.__version__,
                            "numpy": np.__version__, "python": platform.python_version(),
@@ -125,7 +126,7 @@ def experiment(price_csv=None, as_of=None):
             "limitations": ["Normal approximation confidence intervals, not finite-sample guarantees.",
                             "Coverage and RMSE have sampling uncertainty across a finite set of seeds; no calibration or monotonic convergence guarantee.",
                             "One synthetic option parameter setting; equal payoff counts do not establish a runtime speedup.",
-                            "The call benchmark is classical; the studio's separate discrete quantum example does not estimate portfolio tail risk.",
+                            "The bounded exposure oracle estimates an empirical capped/grid mean, not portfolio tail risk; its classical preprocessing already determines the exact grid expectation.",
                             "CSV calibration uses constant historical covariance with risk-neutral drift; it does not establish real-world tail accuracy."]}
 
 
