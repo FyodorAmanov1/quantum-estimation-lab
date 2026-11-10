@@ -110,15 +110,18 @@ def convergence_experiment(path_budgets=(256, 1024, 4096, 16384), n_seeds=128, s
 
 def experiment(price_csv=None, as_of=None):
     from src.studio import calibrated_comparison, risk_model_comparison, bounded_exposure_comparison
+    from src.coverage import amplitude_coverage_comparison
     import scipy
     reference = black_scholes_call()
     plain, anti = monte_carlo(), monte_carlo(antithetic=True)
+    bounded = bounded_exposure_comparison(price_csv, as_of)
     return {"project": "quantum-estimation-lab", "seed": 1729,
             "metrics": {"analytic_price": reference, "monte_carlo": plain, "antithetic": anti,
                         "convergence": convergence_experiment(),
                         "portfolio_calibration": calibrated_comparison(price_csv, as_of),
                         "portfolio_model_risk": risk_model_comparison(price_csv, as_of),
-                        "bounded_exposure": bounded_exposure_comparison(price_csv, as_of)},
+                        "bounded_exposure": bounded,
+                        "amplitude_coverage": amplitude_coverage_comparison(bounded)},
             "provenance": {"data": "Call benchmark: synthetic risk-neutral GBM; portfolio comparison records its own dated CSV provenance",
                            "scipy": scipy.__version__,
                            "numpy": np.__version__, "python": platform.python_version(),
@@ -138,7 +141,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.price_csv is not None and args.as_of is None:
         parser.error("--price-csv requires --as-of YYYY-MM-DD")
-    result = json.dumps(experiment(args.price_csv, args.as_of), indent=2, allow_nan=False) + "\n"
+    result = json.dumps(experiment(args.price_csv, args.as_of), indent=1, allow_nan=False) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(result, encoding="utf-8", newline="\n")

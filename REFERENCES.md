@@ -1,5 +1,7 @@
 # Primary references and implementation boundaries
 
+- [Clopper and Pearson, The use of confidence or fiducial limits illustrated in the case of the binomial (1934)](https://doi.org/10.1093/biomet/26.4.404): primary basis for the equal-tailed exact binomial baseline and Monte Carlo coverage uncertainty intervals in QE05. The likelihood intervals retain an asymptotic cutoff and have no corresponding finite-sample guarantee.
+
 - [Original portfolio PFE project](https://github.com/FyodorAmanov1/QStockPrediction)
 - [Amplitude amplification and estimation](https://arxiv.org/abs/quant-ph/0005055)
 - [Suzuki et al., Amplitude estimation without phase estimation](https://arxiv.org/abs/1904.10246): primary basis for combining counts at different Grover powers by maximum likelihood. The implementation uses a finite theta mesh and a conditional asymptotic likelihood interval; no interval coverage or performance guarantee is inferred from this citation.

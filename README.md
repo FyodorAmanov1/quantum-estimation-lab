@@ -70,6 +70,16 @@ than their classical sampling baselines. No computational advantage follows.
 See [QE04 methods and findings](reports/QE04.md) for the complete error budget,
 independent numerical references, preparation costs and limitations.
 
+The **Amplitude interval coverage** studio case measures 128 independent
+trials at each of 11 amplitudes, including exact/near boundaries and both
+bounded exposure targets, at 8,960 preparation/inverse calls per trial.
+Legacy interval coverage is 0/128 at amplitudes 0 and 1 because its search
+excludes the endpoints; an endpoint-inclusive diagnostic reaches 128/128.
+For GBM and mixture exposure targets, likelihood coverage is 119/128 and
+123/128, with finite-trial uncertainty reported alongside bias, RMSE and an
+exact binomial classical baseline. These are conditional grid-mean intervals,
+excluding cap, grid, scenario and model errors. See [QE05](reports/QE05.md).
+
 ## Run locally
 
 Use Python 3.12. From the repository root:

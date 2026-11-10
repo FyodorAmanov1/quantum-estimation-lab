@@ -767,7 +767,13 @@ def experiment(price_csv=None, as_of=None):
     )
     cases.append(calibration_case(calibrated_comparison(price_csv, as_of)))
     cases.append(risk_model_case(risk_model_comparison(price_csv, as_of)))
-    cases.append(bounded_exposure_case(bounded_exposure_comparison(price_csv, as_of)))
+    bounded = bounded_exposure_comparison(price_csv, as_of)
+    cases.append(bounded_exposure_case(bounded))
+    try:
+        from .coverage import amplitude_coverage_case, amplitude_coverage_comparison
+    except ImportError:
+        from coverage import amplitude_coverage_case, amplitude_coverage_comparison
+    cases.append(amplitude_coverage_case(amplitude_coverage_comparison(bounded)))
     return {
         "schema_version": 1,
         "slug": "quantum-estimation-lab",
@@ -777,6 +783,10 @@ def experiment(price_csv=None, as_of=None):
         "seed": 1729,
         "cases": cases,
         "references": [
+            {
+                "title": "Clopper and Pearson: exact binomial confidence limits (1934)",
+                "url": "https://doi.org/10.1093/biomet/26.4.404",
+            },
             {
                 "title": "Suzuki et al.: amplitude estimation without phase estimation",
                 "url": "https://arxiv.org/abs/1904.10246",

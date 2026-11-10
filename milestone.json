@@ -1,15 +1,16 @@
 {
-  "task_id": "QE04",
+  "task_id": "QE05",
   "status": "completed",
-  "summary": "Encoded the actual CSV-calibrated option book's bounded positive-exposure grid in the existing amplitude oracle. Measured separate truncation, grid and amplitude-estimation errors under GBM and the specified variance mixture, with cap/grid sensitivity, exact and sampled classical baselines, independent numerical references and twelve scenario replicates. The studio exposes the comparison. Grid rounding dominates default cap loss. Both recorded amplitude trials are less accurate than both classical sampling baselines and both conditional intervals miss the grid target. No population accuracy or quantum advantage is claimed.",
+  "summary": "Measured conditional likelihood-interval coverage, bias, RMSE and width across 128 independent trials at each of eleven amplitudes, including exact and near boundaries and both empirical option-book exposure oracles. All trials use a fixed 8960 preparation/inverse-call schedule. Compared legacy and endpoint-inclusive inference on shared counts with an equal-query exact binomial classical baseline. Legacy intervals cover neither exact boundary; endpoint inclusion repairs support exclusion without claiming calibrated coverage. Added the measured study to the existing studio with trial-level evidence and numerical likelihood-set diagnostics.",
   "evidence_paths": [
+    "src/coverage.py",
     "src/studio.py",
     "lab.py",
-    "tests/test_exposure.py",
+    "tests/test_coverage.py",
     "results/latest.json",
     "docs/study.json",
-    "reports/QE04.md",
-    "reports/QE04-validation.json",
+    "reports/QE05.md",
+    "reports/QE05-validation.json",
     "reports/applied-study.md",
     "README.md",
     "REFERENCES.md"
