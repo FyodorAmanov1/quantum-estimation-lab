@@ -65,6 +65,6 @@ def finalize(study, argv=None):
     else:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(
-            json.dumps(study, indent=2, allow_nan=False) + "\n", encoding="utf-8", newline="\n"
+            json.dumps(study, indent=1, allow_nan=False) + "\n", encoding="utf-8", newline="\n"
         )
         print(f"Wrote {args.out}: {len(study['cases'])} measured cases")

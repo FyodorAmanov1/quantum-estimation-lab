@@ -168,4 +168,28 @@ loss, and supplies no hardware or quantum advantage evidence.
 
 - Validate the specified non-Gaussian comparison on held-out observations and quantify sensitivity to regime assumptions; covariance fitting alone does not identify tail shape.
 - Develop a coherent scenario/repricing circuit with gate and precision costs; the bounded empirical exposure oracle currently requires classical preprocessing.
-- Measure amplitude-estimator bias and interval coverage across independent trials, including boundary probabilities.
+- Refine likelihood-set numerical edges and test cutoff calibration beyond the measured fixed-schedule amplitudes; endpoint inclusion alone does not ensure finite-sample coverage.
+
+## Conditional amplitude interval coverage
+
+[QE05](QE05.md) adds **Amplitude interval coverage** to the studio. It freezes
+the two bounded empirical exposure laws and tests them alongside nine boundary
+and interior amplitudes, using 128 independent trials per target. Powers
+0,1,2,4,8 with 256 shots each cost 8960 preparation/inverse calls per trial;
+the classical exact binomial comparator uses 8960 power-zero preparations.
+All counts, seeds, intervals, coverage uncertainty, bias and RMSE are exported.
+
+Legacy interval coverage is 0/128 at both exact boundaries because the theta
+mesh excludes them. Adding exact endpoint likelihoods repairs support
+exclusion, giving 128/128, but supplies no finite-sample calibration guarantee.
+The GBM and mixture likelihood intervals cover 119/128 and 123/128 trials,
+with Monte Carlo 95% bounds [87.07%,96.74%] and [91.12%,98.72%]. Their
+conditional amplitude RMSEs are 0.00163487 and 0.00152844, compared with
+0.00537047 and 0.00504297 for the sampled classical baseline. This retains
+QE04's unfavorable individual trials while giving repeated-trial context.
+
+Disconnected sets and finite-mesh hull errors are recorded explicitly.
+Coverage is conditional on known empirical grid means and does not include
+scenario, cap, grid or model error. Exact histogram means are already known
+classically; ideal binomial simulation and equal logical calls establish no
+hardware performance or quantum advantage.

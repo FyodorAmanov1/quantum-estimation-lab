@@ -1,0 +1,45 @@
+{
+  "task_id": "QE05",
+  "unit_tests": {
+    "command": "python -m unittest discover -s tests -v",
+    "passed": 31
+  },
+  "artifacts": {
+    "lab_studio_coverage_identical": true,
+    "prior_cases_unchanged": [
+      "risk-1",
+      "risk-1.8",
+      "amplitude",
+      "calibration",
+      "model-risk",
+      "bounded-exposure"
+    ],
+    "finite_json": true,
+    "bytes": {
+      "docs/study.json": 1512359,
+      "results/latest.json": 1835278
+    }
+  },
+  "acceptance": {
+    "trials_per_amplitude": 128,
+    "amplitude_targets": 11,
+    "total_amplified_trials": 1408,
+    "queries_per_trial": 8960,
+    "boundary_amplitudes": [
+      0,
+      1
+    ],
+    "status": "met"
+  },
+  "studio_reproduction": {
+    "command": "python src/studio.py --check docs/study.json",
+    "cases_reproduced": 7,
+    "status": "passed"
+  },
+  "trusted_contract": {
+    "command": "python quality/contract.py --project . --name quantum-estimation-lab --base HEAD --task-id QE05",
+    "independent_checks": "passed",
+    "metrics_reproduced": true
+  },
+  "whitespace_check": "passed"
+}
