@@ -1,16 +1,15 @@
 {
-  "task_id": "QE05",
+  "task_id": "QE06",
   "status": "completed",
-  "summary": "Measured conditional likelihood-interval coverage, bias, RMSE and width across 128 independent trials at each of eleven amplitudes, including exact and near boundaries and both empirical option-book exposure oracles. All trials use a fixed 8960 preparation/inverse-call schedule. Compared legacy and endpoint-inclusive inference on shared counts with an equal-query exact binomial classical baseline. Legacy intervals cover neither exact boundary; endpoint inclusion repairs support exclusion without claiming calibrated coverage. Added the measured study to the existing studio with trial-level evidence and numerical likelihood-set diagnostics.",
+  "summary": "Added replayable Ry/CNOT preparation circuits for both empirical option-book exposure laws, a clean-workspace zero reflection, and per-power logical gate ledgers separating forward preparation, inverse preparation and controlled gates. Verified state, inverse and Grover equivalence against the dense oracle. Compared the amplitude schedule with equal-call power-zero sampling and connected grid approximation error to preparation size in a new studio case. Explicitly retained CCX as a three-qubit primitive and documented preprocessing and synthesis exclusions.",
   "evidence_paths": [
-    "src/coverage.py",
+    "src/oracle_resources.py",
     "src/studio.py",
     "lab.py",
-    "tests/test_coverage.py",
+    "tests/test_oracle_resources.py",
     "results/latest.json",
     "docs/study.json",
-    "reports/QE05.md",
-    "reports/QE05-validation.json",
+    "reports/QE06.md",
     "reports/applied-study.md",
     "README.md",
     "REFERENCES.md"

@@ -74528,6 +74528,2018 @@
      ]
     }
    ]
+  },
+  "oracle_compilation": {
+   "as_of": "2025-12-31",
+   "data_source": "Generated synthetic price CSV; no market observations",
+   "rows": [
+    {
+     "model": "gbm",
+     "levels": 32,
+     "exact_grid_mean_usd": 139.6669449344758,
+     "preparation_circuit": {
+      "data_qubits": 6,
+      "gates": [
+       {
+        "gate": "Ry",
+        "target": 0,
+        "angle": 1.0881652478946477
+       },
+       {
+        "gate": "Ry",
+        "target": 1,
+        "angle": 1.2587768484833763
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 1
+       },
+       {
+        "gate": "Ry",
+        "target": 1,
+        "angle": 0.33861924661707477
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 1
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": 1.3801972892175371
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": 0.01788629661787622
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": -0.05360597213253315
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": 0.13221844433509022
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": 1.458420993471813
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.06537867465827998
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.0196426140812532
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.048469890342481725
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.021786724214659714
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.10535405404575063
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.037869928692191274
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": 0.018147018103560453
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 1.5163215195576534
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.08086161622375626
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.0034444277889016384
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.06521233166338941
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.016893819919828718
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.0837948349945178
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.007017894326623836
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.04765082221013847
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.015501331937062185
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.0880648568248048
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.009889130511494953
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.07612686678423661
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.011676567170684299
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.09689921209673112
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.008417492245851116
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.023551878240046314
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.5707963267948961
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.057635158211892246
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.10414035333616081
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 0.0
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.014548103996459102
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -4.163336342344337e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.18946914232276182
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.018695798531313423
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.026572972154878444
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 8.326672684688674e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.015579102448624801
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 6.938893903907228e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.34262570156123406
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 8.326672684688674e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.02376631575590439
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.03650524648864398
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 0.0
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.014166876489782085
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.05494985509413394
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.01995587614046848
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.029063279890004318
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.01623798261625363
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.6068845617563812
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 5
+       }
+      ]
+     },
+     "zero_reflection_circuit": {
+      "work_qubits": 4,
+      "gates": [
+       {
+        "gate": "X",
+        "target": 0
+       },
+       {
+        "gate": "X",
+        "target": 1
+       },
+       {
+        "gate": "X",
+        "target": 2
+       },
+       {
+        "gate": "X",
+        "target": 3
+       },
+       {
+        "gate": "X",
+        "target": 4
+       },
+       {
+        "gate": "X",
+        "target": 5
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         0,
+         1
+        ],
+        "target": 6
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         6,
+         2
+        ],
+        "target": 7
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         7,
+         3
+        ],
+        "target": 8
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         8,
+         4
+        ],
+        "target": 9
+       },
+       {
+        "gate": "CZ",
+        "control": 9,
+        "target": 5
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         8,
+         4
+        ],
+        "target": 9
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         7,
+         3
+        ],
+        "target": 8
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         6,
+         2
+        ],
+        "target": 7
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         0,
+         1
+        ],
+        "target": 6
+       },
+       {
+        "gate": "X",
+        "target": 0
+       },
+       {
+        "gate": "X",
+        "target": 1
+       },
+       {
+        "gate": "X",
+        "target": 2
+       },
+       {
+        "gate": "X",
+        "target": 3
+       },
+       {
+        "gate": "X",
+        "target": 4
+       },
+       {
+        "gate": "X",
+        "target": 5
+       }
+      ]
+     },
+     "ledger": {
+      "data_qubits": 6,
+      "clean_work_qubits": 4,
+      "peak_qubits": 10,
+      "per_preparation": {
+       "Ry": 63,
+       "CNOT": 62
+      },
+      "per_zero_reflection": {
+       "X": 12,
+       "CCX": 8,
+       "CZ": 1
+      },
+      "rows": [
+       {
+        "grover_power": 0,
+        "shots": 256,
+        "preparation_calls": 256,
+        "inverse_preparation_calls": 0,
+        "grover_iterations": 0,
+        "zero_reflections": 0,
+        "good_reflections": 0,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 16128,
+         "CNOT": 15872,
+         "X": 0,
+         "Z": 0,
+         "CZ": 0,
+         "CCX": 0
+        }
+       },
+       {
+        "grover_power": 1,
+        "shots": 256,
+        "preparation_calls": 512,
+        "inverse_preparation_calls": 256,
+        "grover_iterations": 256,
+        "zero_reflections": 256,
+        "good_reflections": 256,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 48384,
+         "CNOT": 47616,
+         "X": 3072,
+         "Z": 256,
+         "CZ": 256,
+         "CCX": 2048
+        }
+       },
+       {
+        "grover_power": 2,
+        "shots": 256,
+        "preparation_calls": 768,
+        "inverse_preparation_calls": 512,
+        "grover_iterations": 512,
+        "zero_reflections": 512,
+        "good_reflections": 512,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 80640,
+         "CNOT": 79360,
+         "X": 6144,
+         "Z": 512,
+         "CZ": 512,
+         "CCX": 4096
+        }
+       },
+       {
+        "grover_power": 4,
+        "shots": 256,
+        "preparation_calls": 1280,
+        "inverse_preparation_calls": 1024,
+        "grover_iterations": 1024,
+        "zero_reflections": 1024,
+        "good_reflections": 1024,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 145152,
+         "CNOT": 142848,
+         "X": 12288,
+         "Z": 1024,
+         "CZ": 1024,
+         "CCX": 8192
+        }
+       },
+       {
+        "grover_power": 8,
+        "shots": 256,
+        "preparation_calls": 2304,
+        "inverse_preparation_calls": 2048,
+        "grover_iterations": 2048,
+        "zero_reflections": 2048,
+        "good_reflections": 2048,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 274176,
+         "CNOT": 269824,
+         "X": 24576,
+         "Z": 2048,
+         "CZ": 2048,
+         "CCX": 16384
+        }
+       }
+      ],
+      "totals": {
+       "shots": 1280,
+       "preparation_calls": 5120,
+       "inverse_preparation_calls": 3840,
+       "grover_iterations": 3840,
+       "zero_reflections": 3840,
+       "good_reflections": 3840,
+       "controlled_A_calls": 0,
+       "gates": {
+        "Ry": 564480,
+        "CNOT": 555520,
+        "X": 46080,
+        "Z": 3840,
+        "CZ": 3840,
+        "CCX": 30720
+       },
+       "preparation_or_inverse_calls": 8960
+      }
+     },
+     "power_zero_baseline": {
+      "data_qubits": 6,
+      "clean_work_qubits": 4,
+      "peak_qubits": 10,
+      "per_preparation": {
+       "Ry": 63,
+       "CNOT": 62
+      },
+      "per_zero_reflection": {
+       "X": 12,
+       "CCX": 8,
+       "CZ": 1
+      },
+      "rows": [
+       {
+        "grover_power": 0,
+        "shots": 8960,
+        "preparation_calls": 8960,
+        "inverse_preparation_calls": 0,
+        "grover_iterations": 0,
+        "zero_reflections": 0,
+        "good_reflections": 0,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 564480,
+         "CNOT": 555520,
+         "X": 0,
+         "Z": 0,
+         "CZ": 0,
+         "CCX": 0
+        }
+       }
+      ],
+      "totals": {
+       "shots": 8960,
+       "preparation_calls": 8960,
+       "inverse_preparation_calls": 0,
+       "grover_iterations": 0,
+       "zero_reflections": 0,
+       "good_reflections": 0,
+       "controlled_A_calls": 0,
+       "gates": {
+        "Ry": 564480,
+        "CNOT": 555520,
+        "X": 0,
+        "Z": 0,
+        "CZ": 0,
+        "CCX": 0
+       },
+       "preparation_or_inverse_calls": 8960
+      }
+     },
+     "validation": {
+      "state_max_abs_error": 2.220446049250313e-16,
+      "inverse_max_abs_error": 4.745321518474461e-16,
+      "grover_matrix_max_abs_error": 8.881784197001252e-16,
+      "success_probabilities": [
+       {
+        "grover_power": 0,
+        "compiled": 0.34916736233618917,
+        "householder": 0.3491673623361895,
+        "absolute_difference": 3.3306690738754696e-16
+       },
+       {
+        "grover_power": 1,
+        "compiled": 0.8975936634229762,
+        "householder": 0.8975936634229764,
+        "absolute_difference": 2.220446049250313e-16
+       },
+       {
+        "grover_power": 2,
+        "compiled": 0.0003724869882249784,
+        "householder": 0.00037248698822502427,
+        "absolute_difference": 4.586175189613684e-17
+       },
+       {
+        "grover_power": 4,
+        "compiled": 0.31284929862882505,
+        "householder": 0.3128492986288238,
+        "absolute_difference": 1.2212453270876722e-15
+       },
+       {
+        "grover_power": 8,
+        "compiled": 0.9394915373197362,
+        "householder": 0.9394915373197412,
+        "absolute_difference": 4.9960036108132044e-15
+       }
+      ]
+     }
+    },
+    {
+     "model": "variance_mixture",
+     "levels": 32,
+     "exact_grid_mean_usd": 139.55275012600805,
+     "preparation_circuit": {
+      "data_qubits": 6,
+      "gates": [
+       {
+        "gate": "Ry",
+        "target": 0,
+        "angle": 1.0289881547874071
+       },
+       {
+        "gate": "Ry",
+        "target": 1,
+        "angle": 1.2836596932266935
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 1
+       },
+       {
+        "gate": "Ry",
+        "target": 1,
+        "angle": 0.3976582829960666
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 1
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": 1.4584514037752796
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": -0.06334016435978201
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": 0.09482478160184044
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 2,
+        "angle": 0.09796985782999262
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 2
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": 1.5127978636051056
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.1249917138823047
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": 0.03467342063904194
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.07693688838798679
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": 0.041836761300331926
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.16841802170683495
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": 0.0458923448754516
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 3,
+        "angle": -0.012741729130591739
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 3
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 1.5599707832221825
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.09544645251649495
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.0071870243751465945
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.10187375174336143
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.01675809195190192
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.10738599557662522
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.015210758371181854
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.08682808188628631
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.04182102790508156
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.11431644679006886
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.017868323609451564
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.11643796802397142
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.031346677608462034
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.10096748013576247
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": 0.01735348455052904
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 4,
+        "angle": -0.05066824219720677
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 4
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.5707963267948961
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.057635158211892246
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.10414035333616084
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.01454810399645913
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.18946914232276182
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.01869579853131341
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.026572972154878444
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.015579102448624801
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 8.326672684688674e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.34262570156123406
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 8.326672684688674e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.02376631575590442
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.03650524648864398
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 0.0
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.014166876489782085
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.05494985509413394
+       },
+       {
+        "gate": "CNOT",
+        "control": 1,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.01995587614046848
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.029063279890004318
+       },
+       {
+        "gate": "CNOT",
+        "control": 2,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 2.7755575615628914e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.016237982616253643
+       },
+       {
+        "gate": "CNOT",
+        "control": 3,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": 1.3877787807814457e-17
+       },
+       {
+        "gate": "CNOT",
+        "control": 4,
+        "target": 5
+       },
+       {
+        "gate": "Ry",
+        "target": 5,
+        "angle": -0.6068845617563811
+       },
+       {
+        "gate": "CNOT",
+        "control": 0,
+        "target": 5
+       }
+      ]
+     },
+     "zero_reflection_circuit": {
+      "work_qubits": 4,
+      "gates": [
+       {
+        "gate": "X",
+        "target": 0
+       },
+       {
+        "gate": "X",
+        "target": 1
+       },
+       {
+        "gate": "X",
+        "target": 2
+       },
+       {
+        "gate": "X",
+        "target": 3
+       },
+       {
+        "gate": "X",
+        "target": 4
+       },
+       {
+        "gate": "X",
+        "target": 5
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         0,
+         1
+        ],
+        "target": 6
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         6,
+         2
+        ],
+        "target": 7
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         7,
+         3
+        ],
+        "target": 8
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         8,
+         4
+        ],
+        "target": 9
+       },
+       {
+        "gate": "CZ",
+        "control": 9,
+        "target": 5
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         8,
+         4
+        ],
+        "target": 9
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         7,
+         3
+        ],
+        "target": 8
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         6,
+         2
+        ],
+        "target": 7
+       },
+       {
+        "gate": "CCX",
+        "controls": [
+         0,
+         1
+        ],
+        "target": 6
+       },
+       {
+        "gate": "X",
+        "target": 0
+       },
+       {
+        "gate": "X",
+        "target": 1
+       },
+       {
+        "gate": "X",
+        "target": 2
+       },
+       {
+        "gate": "X",
+        "target": 3
+       },
+       {
+        "gate": "X",
+        "target": 4
+       },
+       {
+        "gate": "X",
+        "target": 5
+       }
+      ]
+     },
+     "ledger": {
+      "data_qubits": 6,
+      "clean_work_qubits": 4,
+      "peak_qubits": 10,
+      "per_preparation": {
+       "Ry": 63,
+       "CNOT": 62
+      },
+      "per_zero_reflection": {
+       "X": 12,
+       "CCX": 8,
+       "CZ": 1
+      },
+      "rows": [
+       {
+        "grover_power": 0,
+        "shots": 256,
+        "preparation_calls": 256,
+        "inverse_preparation_calls": 0,
+        "grover_iterations": 0,
+        "zero_reflections": 0,
+        "good_reflections": 0,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 16128,
+         "CNOT": 15872,
+         "X": 0,
+         "Z": 0,
+         "CZ": 0,
+         "CCX": 0
+        }
+       },
+       {
+        "grover_power": 1,
+        "shots": 256,
+        "preparation_calls": 512,
+        "inverse_preparation_calls": 256,
+        "grover_iterations": 256,
+        "zero_reflections": 256,
+        "good_reflections": 256,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 48384,
+         "CNOT": 47616,
+         "X": 3072,
+         "Z": 256,
+         "CZ": 256,
+         "CCX": 2048
+        }
+       },
+       {
+        "grover_power": 2,
+        "shots": 256,
+        "preparation_calls": 768,
+        "inverse_preparation_calls": 512,
+        "grover_iterations": 512,
+        "zero_reflections": 512,
+        "good_reflections": 512,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 80640,
+         "CNOT": 79360,
+         "X": 6144,
+         "Z": 512,
+         "CZ": 512,
+         "CCX": 4096
+        }
+       },
+       {
+        "grover_power": 4,
+        "shots": 256,
+        "preparation_calls": 1280,
+        "inverse_preparation_calls": 1024,
+        "grover_iterations": 1024,
+        "zero_reflections": 1024,
+        "good_reflections": 1024,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 145152,
+         "CNOT": 142848,
+         "X": 12288,
+         "Z": 1024,
+         "CZ": 1024,
+         "CCX": 8192
+        }
+       },
+       {
+        "grover_power": 8,
+        "shots": 256,
+        "preparation_calls": 2304,
+        "inverse_preparation_calls": 2048,
+        "grover_iterations": 2048,
+        "zero_reflections": 2048,
+        "good_reflections": 2048,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 274176,
+         "CNOT": 269824,
+         "X": 24576,
+         "Z": 2048,
+         "CZ": 2048,
+         "CCX": 16384
+        }
+       }
+      ],
+      "totals": {
+       "shots": 1280,
+       "preparation_calls": 5120,
+       "inverse_preparation_calls": 3840,
+       "grover_iterations": 3840,
+       "zero_reflections": 3840,
+       "good_reflections": 3840,
+       "controlled_A_calls": 0,
+       "gates": {
+        "Ry": 564480,
+        "CNOT": 555520,
+        "X": 46080,
+        "Z": 3840,
+        "CZ": 3840,
+        "CCX": 30720
+       },
+       "preparation_or_inverse_calls": 8960
+      }
+     },
+     "power_zero_baseline": {
+      "data_qubits": 6,
+      "clean_work_qubits": 4,
+      "peak_qubits": 10,
+      "per_preparation": {
+       "Ry": 63,
+       "CNOT": 62
+      },
+      "per_zero_reflection": {
+       "X": 12,
+       "CCX": 8,
+       "CZ": 1
+      },
+      "rows": [
+       {
+        "grover_power": 0,
+        "shots": 8960,
+        "preparation_calls": 8960,
+        "inverse_preparation_calls": 0,
+        "grover_iterations": 0,
+        "zero_reflections": 0,
+        "good_reflections": 0,
+        "controlled_A_calls": 0,
+        "gates": {
+         "Ry": 564480,
+         "CNOT": 555520,
+         "X": 0,
+         "Z": 0,
+         "CZ": 0,
+         "CCX": 0
+        }
+       }
+      ],
+      "totals": {
+       "shots": 8960,
+       "preparation_calls": 8960,
+       "inverse_preparation_calls": 0,
+       "grover_iterations": 0,
+       "zero_reflections": 0,
+       "good_reflections": 0,
+       "controlled_A_calls": 0,
+       "gates": {
+        "Ry": 564480,
+        "CNOT": 555520,
+        "X": 0,
+        "Z": 0,
+        "CZ": 0,
+        "CCX": 0
+       },
+       "preparation_or_inverse_calls": 8960
+      }
+     },
+     "validation": {
+      "state_max_abs_error": 1.3877787807814457e-16,
+      "inverse_max_abs_error": 6.661338147750939e-16,
+      "grover_matrix_max_abs_error": 1.3322676295501878e-15,
+      "success_probabilities": [
+       {
+        "grover_power": 0,
+        "compiled": 0.34888187531502024,
+        "householder": 0.34888187531502013,
+        "absolute_difference": 1.1102230246251565e-16
+       },
+       {
+        "grover_power": 1,
+        "compiled": 0.8981377755688007,
+        "householder": 0.898137775568799,
+        "absolute_difference": 1.6653345369377348e-15
+       },
+       {
+        "grover_power": 2,
+        "compiled": 0.00031694163906438106,
+        "householder": 0.00031694163906440274,
+        "absolute_difference": 2.168404344971009e-17
+       },
+       {
+        "grover_power": 4,
+        "compiled": 0.31535126962723037,
+        "householder": 0.3153512696272279,
+        "absolute_difference": 2.4424906541753444e-15
+       },
+       {
+        "grover_power": 8,
+        "compiled": 0.9370411854293754,
+        "householder": 0.937041185429369,
+        "absolute_difference": 6.439293542825908e-15
+       }
+      ]
+     }
+    }
+   ],
+   "grid_sensitivity_gbm": [
+    {
+     "levels": 16,
+     "grid_error_usd": -11.954573715982832,
+     "per_preparation": {
+      "Ry": 31,
+      "CNOT": 30
+     },
+     "peak_qubits": 8,
+     "schedule_gates": {
+      "Ry": 277760,
+      "CNOT": 268800,
+      "X": 38400,
+      "Z": 3840,
+      "CZ": 3840,
+      "CCX": 23040
+     }
+    },
+    {
+     "levels": 32,
+     "grid_error_usd": -5.841502479423724,
+     "per_preparation": {
+      "Ry": 63,
+      "CNOT": 62
+     },
+     "peak_qubits": 10,
+     "schedule_gates": {
+      "Ry": 564480,
+      "CNOT": 555520,
+      "X": 46080,
+      "Z": 3840,
+      "CZ": 3840,
+      "CCX": 30720
+     }
+    },
+    {
+     "levels": 64,
+     "grid_error_usd": -2.867155871240783,
+     "per_preparation": {
+      "Ry": 127,
+      "CNOT": 126
+     },
+     "peak_qubits": 12,
+     "schedule_gates": {
+      "Ry": 1137920,
+      "CNOT": 1128960,
+      "X": 53760,
+      "Z": 3840,
+      "CZ": 3840,
+      "CCX": 38400
+     }
+    }
+   ],
+   "conventions": [
+    "Q = -A S0 A^-1 Sgood; time order Sgood, inverse A, S0, A. Initial A is counted for every shot. Global minus is free; Q powers are repeated, not controlled.",
+    "A is a binary joint-probability tree with cyclic Gray-code Ry/CNOT multiplexors. No zero-angle pruning, cross-block cancellation or connectivity routing. Ry angles are exact real numbers for this logical model.",
+    "For L exposure nodes and n=log2(2L) data qubits, unpruned A has 2L-1 Ry and 2L-2 CNOT. Grid-size sensitivity counts depend only on circuit shape; its USD errors reuse the actual GBM cap/grid experiment.",
+    "Sgood is Z on the payoff ancilla. S0 uses X on all data qubits, a clean AND ladder of CCX, CZ, the reversed ladder and X again. Work qubits start and end at zero and are reused.",
+    "CCX is a three-qubit primitive retained separately. The ledger is mixed-level, not an elementary two-qubit total or a fault-tolerant T count. Arbitrary rotation synthesis precision, noise, routing, reset, runtime and classical inference are excluded.",
+    "Power-zero baseline uses the same A and 8960 shots, matching preparation/inverse calls, not gates or runtime. Direct classical histogram summation already knows the mean and needs no quantum gates."
+   ],
+   "limitations": [
+    "This compiles the already computed empirical histogram, not coherent scenarios, option pricing or CSV loading. Classical preparation costs from the bounded exposure case remain payable.",
+    "A differs from the Householder unitary away from |0>, but A S0 A^-1 and all Grover success probabilities agree numerically. This is an alternative compilation of the state action, not a decomposition of the full Householder matrix.",
+    "Synthetic prices and ideal statevectors; no hardware performance, market accuracy or quantum advantage claim. Cap, grid, sampling and model errors remain separate."
+   ]
   }
  },
  "provenance": {

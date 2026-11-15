@@ -170,6 +170,31 @@ loss, and supplies no hardware or quantum advantage evidence.
 - Develop a coherent scenario/repricing circuit with gate and precision costs; the bounded empirical exposure oracle currently requires classical preprocessing.
 - Refine likelihood-set numerical edges and test cutoff calibration beyond the measured fixed-schedule amplitudes; endpoint inclusion alone does not ensure finite-sample coverage.
 
+## Oracle compilation ledger
+
+[QE06](QE06.md) adds replayable gate sequences and a studio case for both
+bounded option-book exposure laws. A binary joint-probability tree prepares
+the same state as the dense oracle, using Gray-code Ry/CNOT multiplexors.
+The unitary completion differs from Householder preparation; the state and
+Grover reflection agree numerically. State errors are below 3e-16 and Grover
+matrix errors below 2e-15 for both bundled laws.
+
+Each 32-node preparation has 63 Ry and 62 CNOT gates. Powers 0,1,2,4,8 with
+256 shots each require 5,120 preparations, 3,840 inverse preparations and
+3,840 Grover iterations per model. The full logical inventory is 564,480 Ry,
+555,520 CNOT, 30,720 CCX, 3,840 CZ, 46,080 X and 3,840 Z. Six data and four
+clean reusable workspace qubits are included. CCX is a separate three-qubit
+primitive; arbitrary rotations are ideal, so these are not elementary-gate
+or fault-tolerant totals. Controlled-A and controlled-Q counts are zero.
+
+Power-zero sampling with 8,960 shots uses the same preparation Ry/CNOT total
+and avoids reflection gates. Equal calls do not imply equal runtime or
+accuracy. The direct classical histogram sum already supplies the encoded
+expectation. At fixed 400 USD cap, 16/32/64 grid nodes have measured GBM floor
+errors -11.9546/-5.8415/-2.8672 USD and require 31/63/127 Ry per preparation.
+Finer grids reduce this approximation error while increasing circuit size;
+classical scenarios and option revaluation retain their original costs.
+
 ## Conditional amplitude interval coverage
 
 [QE05](QE05.md) adds **Amplitude interval coverage** to the studio. It freezes
