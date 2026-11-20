@@ -1,11 +1,13 @@
 import json
 import unittest
+from collections import Counter
 
 import numpy as np
 
 from src.oracle_resources import (preparation_circuit, inverse_circuit, replay,
                                   zero_reflection_circuit, schedule_ledger,
-                                  oracle_compilation_comparison, oracle_compilation_case)
+                                  oracle_compilation_comparison, oracle_compilation_case,
+                                  estimation_shot_circuit)
 from src.studio import amplitude_oracle, bounded_exposure_comparison
 
 
@@ -60,6 +62,41 @@ class OracleResourceTests(unittest.TestCase):
         self.assertEqual(baseline['gates']['CNOT'], t['gates']['CNOT'])
         self.assertEqual(baseline['gates']['CCX'], 0)
         self.assertEqual(baseline['inverse_preparation_calls'], 0)
+        self.assertEqual(t['controlled_Q_calls'], 0)
+        self.assertEqual(t['gates_by_operation']['preparation'], {'Ry': 322560, 'CNOT': 317440})
+        self.assertEqual(t['gates_by_operation']['inverse_preparation'], {'Ry': 241920, 'CNOT': 238080})
+        self.assertEqual(t['controlled_gates'], {'CNOT': 555520, 'CZ': 3840, 'CCX': 30720})
+        power_zero = schedule_ledger(circuit, [{'grover_power': 0, 'shots': 8960}])
+        self.assertEqual(power_zero['clean_work_qubits'], 0)
+        self.assertEqual(power_zero['peak_qubits'], 6)
+
+    def test_ledger_matches_emitted_shots_and_full_state_evolution(self):
+        # Vary shot allocations and compare formula counts against actual emitted gates.
+        # Dense Q uses a different unitary completion, independently of the compiler.
+        for p, f in (([.1, .2, .3, .4], [0, .2, .7, 1]),
+                     ([0, 0, 1, 0], [0, 1, 0, 1]),
+                     ([0, 0, 0, 1], [0, 0, 0, 1])):
+            circuit = preparation_circuit(p, f)
+            state, Q = amplitude_oracle(p, f)
+            counts = [{'grover_power': k, 'shots': shots} for k, shots in ((0, 7), (1, 3), (3, 2))]
+            ledger = schedule_ledger(circuit, counts)
+            inventory = Counter()
+            for row in ledger['rows']:
+                k = row['grover_power']
+                shot = estimation_shot_circuit(circuit, k)
+                emitted = Counter(g['gate'] for g in shot['gates'])
+                for gate, count in row['gates'].items():
+                    self.assertEqual(count, emitted[gate] * row['shots'])
+                    self.assertEqual(count, sum(b.get(gate, 0) for b in row['gates_by_operation'].values()))
+                inventory.update({g: count * row['shots'] for g, count in emitted.items()})
+                work_dim = 2**shot['work_qubits']
+                initial = np.zeros(len(state) * work_dim); initial[0] = 1
+                result = replay(shot['gates'], initial).reshape(len(state), work_dim)
+                np.testing.assert_allclose(result[:, 0], (-1)**k * np.linalg.matrix_power(Q, k) @ state,
+                                           atol=2e-14)
+                np.testing.assert_allclose(result[:, 1:], 0, atol=2e-14)
+            for gate, count in ledger['totals']['gates'].items():
+                self.assertEqual(count, inventory[gate])
 
     def test_applied_evidence_and_studio(self):
         bounded = bounded_exposure_comparison(paths=64, seed=18)
@@ -71,11 +108,16 @@ class OracleResourceTests(unittest.TestCase):
             self.assertLess(row['validation']['state_max_abs_error'], 1e-13)
             self.assertLess(row['validation']['grover_matrix_max_abs_error'], 1e-13)
             self.assertLess(max(p['absolute_difference'] for p in row['validation']['success_probabilities']), 1e-12)
+            for check in row['validation']['success_probabilities']:
+                self.assertLess(check['emitted_gates_absolute_difference'], 1e-12)
+                self.assertLess(check['full_state_max_abs_error'], 1e-12)
+                self.assertLess(check['workspace_leakage_probability'], 1e-24)
         self.assertEqual([r['per_preparation']['Ry'] for r in c['grid_sensitivity_gbm']], [31, 63, 127])
         case = oracle_compilation_case(c)
         for chart in case['charts']:
             self.assertTrue(all(len(s['values']) == len(chart['x']) for s in chart['series']))
         json.dumps(case, allow_nan=False)
+        self.assertTrue(all(len(row) == len(case['table']['columns']) for row in case['table']['rows']))
 
     def test_invalid_inputs(self):
         for p, f in (([], []), ([1], [0]), ([.2, .2], [0, 1]), ([1, 0], [0]),
@@ -87,6 +129,9 @@ class OracleResourceTests(unittest.TestCase):
         for k, shots in ((-1, 4), (1.5, 4), (True, 4), (1, 0), (1, 2.5)):
             with self.assertRaises(ValueError):
                 schedule_ledger(c, [{'grover_power': k, 'shots': shots}])
+        for power in (-1, 1.5, True):
+            with self.assertRaises(ValueError):
+                estimation_shot_circuit(c, power)
 
 
 if __name__ == '__main__':

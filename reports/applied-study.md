@@ -186,6 +186,11 @@ Each 32-node preparation has 63 Ry and 62 CNOT gates. Powers 0,1,2,4,8 with
 clean reusable workspace qubits are included. CCX is a separate three-qubit
 primitive; arbitrary rotations are ideal, so these are not elementary-gate
 or fault-tolerant totals. Controlled-A and controlled-Q counts are zero.
+Forward A contributes 322,560 Ry and 317,440 CNOT; inverse A contributes
+241,920 Ry and 238,080 CNOT. The studio charts these operation subtotals.
+Full emitted shot circuits, including workspace, agree with dense Grover
+probabilities to within 4.3e-15 for both laws over all scheduled powers;
+nonzero-workspace probability is zero in the ideal replay.
 
 Power-zero sampling with 8,960 shots uses the same preparation Ry/CNOT total
 and avoids reflection gates. Equal calls do not imply equal runtime or
@@ -194,6 +199,8 @@ expectation. At fixed 400 USD cap, 16/32/64 grid nodes have measured GBM floor
 errors -11.9546/-5.8415/-2.8672 USD and require 31/63/127 Ry per preparation.
 Finer grids reduce this approximation error while increasing circuit size;
 classical scenarios and option revaluation retain their original costs.
+Power-zero shots use six peak qubits because they never need the four clean
+reflection work bits; the amplitude schedule uses ten.
 
 ## Conditional amplitude interval coverage
 

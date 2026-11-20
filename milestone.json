@@ -1,7 +1,7 @@
 {
   "task_id": "QE06",
   "status": "completed",
-  "summary": "Added replayable Ry/CNOT preparation circuits for both empirical option-book exposure laws, a clean-workspace zero reflection, and per-power logical gate ledgers separating forward preparation, inverse preparation and controlled gates. Verified state, inverse and Grover equivalence against the dense oracle. Compared the amplitude schedule with equal-call power-zero sampling and connected grid approximation error to preparation size in a new studio case. Explicitly retained CCX as a three-qubit primitive and documented preprocessing and synthesis exclusions.",
+  "summary": "Completed the empirical exposure oracle ledger with separate forward/inverse preparation and reflection gate subtotals, controlled-gate inventories and explicit zero controlled-A/Q query counts. Replayed complete emitted shot circuits against dense Grover evolution, including clean workspace, and matched resource formulas to emitted gates. The studio exposes the cost split and equal-call baseline, whose peak workspace is corrected to six qubits versus ten for the amplitude schedule. Retained measured grid-error tradeoffs, exact classical histogram baseline and logical-gate limitations.",
   "evidence_paths": [
     "src/oracle_resources.py",
     "src/studio.py",

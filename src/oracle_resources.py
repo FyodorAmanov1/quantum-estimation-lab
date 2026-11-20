@@ -107,22 +107,53 @@ def schedule_ledger(preparation, counts):
         if any(isinstance(v, bool) or not isinstance(v, Integral) for v in (k, shots)) or k < 0 or shots < 1:
             raise ValueError("Nonnegative integer powers and positive integer shots required")
         forward, inverse, grover = shots * (k + 1), shots * k, shots * k
-        gates = {g: (forward + inverse) * a[g] + grover * s0[g]
-                 + (grover if g == "Z" else 0)
+        by_operation = {
+            "preparation": {g: forward * a[g] for g in a},
+            "inverse_preparation": {g: inverse * a[g] for g in a},
+            "zero_reflection": {g: grover * s0[g] for g in s0},
+            "good_reflection": {"Z": grover},
+        }
+        gates = {g: sum(block.get(g, 0) for block in by_operation.values())
                  for g in ("Ry", "CNOT", "X", "Z", "CZ", "CCX")}
         rows.append({"grover_power": int(k), "shots": int(shots),
                      "preparation_calls": int(forward), "inverse_preparation_calls": int(inverse),
                      "grover_iterations": int(grover), "zero_reflections": int(grover),
                      "good_reflections": int(grover), "controlled_A_calls": 0,
+                     "controlled_Q_calls": 0, "gates_by_operation": by_operation,
                      "gates": gates})
     totals = {key: sum(r[key] for r in rows) for key in (
         "shots", "preparation_calls", "inverse_preparation_calls", "grover_iterations",
-        "zero_reflections", "good_reflections", "controlled_A_calls")}
+        "zero_reflections", "good_reflections", "controlled_A_calls", "controlled_Q_calls")}
     totals["gates"] = {g: sum(r["gates"][g] for r in rows) for g in ("Ry", "CNOT", "X", "Z", "CZ", "CCX")}
     totals["preparation_or_inverse_calls"] = totals["preparation_calls"] + totals["inverse_preparation_calls"]
-    return {"data_qubits": n, "clean_work_qubits": reflection["work_qubits"],
-            "peak_qubits": n + reflection["work_qubits"], "per_preparation": dict(a),
+    totals["gates_by_operation"] = {
+        operation: {g: sum(r["gates_by_operation"][operation][g] for r in rows)
+                    for g in block}
+        for operation, block in (rows[0]["gates_by_operation"].items() if rows else [])}
+    totals["controlled_gates"] = {g: totals["gates"][g] for g in ("CNOT", "CZ", "CCX")}
+    work = reflection["work_qubits"] if totals["grover_iterations"] else 0
+    return {"data_qubits": n, "clean_work_qubits": work,
+            "peak_qubits": n + work, "per_preparation": dict(a),
             "per_zero_reflection": dict(s0), "rows": rows, "totals": totals}
+
+
+def estimation_shot_circuit(preparation, grover_power):
+    """Emit A followed by repeated Sgood, inverse A, S0, A in time order.
+
+    Omits the global sign (-1)**power relative to Q**power A. Work qubits
+    follow data qubits, start clean, and are reused after every reflection.
+    """
+    if (isinstance(grover_power, bool) or not isinstance(grover_power, Integral)
+            or grover_power < 0):
+        raise ValueError("Nonnegative integer Grover power required")
+    n = preparation["data_qubits"]
+    reflection = zero_reflection_circuit(n)
+    iteration = ([{"gate": "Z", "target": n - 1}]
+                 + inverse_circuit(preparation["gates"])
+                 + reflection["gates"] + preparation["gates"])
+    return {"data_qubits": n,
+            "work_qubits": reflection["work_qubits"] if grover_power else 0,
+            "gates": [dict(g) for g in preparation["gates"] + iteration * int(grover_power)]}
 
 
 def oracle_compilation_comparison(bounded):
@@ -148,9 +179,20 @@ def oracle_compilation_comparison(bounded):
         for row in counts:
             k = row["grover_power"]
             actual = float(np.sum((np.linalg.matrix_power(compiled_Q, k) @ A[:, 0])[1::2]**2))
-            dense = float(np.sum((np.linalg.matrix_power(Q, k) @ state)[1::2]**2))
+            dense_state = np.linalg.matrix_power(Q, k) @ state
+            dense = float(np.sum(dense_state[1::2]**2))
+            shot = estimation_shot_circuit(circuit, k)
+            work_dimension = 2**shot["work_qubits"]
+            initial = np.zeros(len(state) * work_dimension); initial[0] = 1
+            final = replay(shot["gates"], initial).reshape(len(state), work_dimension)
+            gate_probability = float(np.sum(final[1::2]**2))
             probabilities.append({"grover_power": k, "compiled": actual, "householder": dense,
-                                  "absolute_difference": abs(actual - dense)})
+                                  "absolute_difference": abs(actual - dense),
+                                  "emitted_gates_probability": gate_probability,
+                                  "emitted_gates_absolute_difference": abs(gate_probability - dense),
+                                  "full_state_max_abs_error": float(np.max(np.abs(
+                                      final[:, 0] - (-1)**k * dense_state))),
+                                  "workspace_leakage_probability": float(np.sum(final[:, 1:]**2))})
         rows.append({"model": source["model"], "levels": grid["levels"],
                      "exact_grid_mean_usd": grid["grid_mean_usd"], "preparation_circuit": circuit,
                      "zero_reflection_circuit": zero_reflection_circuit(circuit["data_qubits"]),
@@ -175,7 +217,8 @@ def oracle_compilation_comparison(bounded):
                 "For L exposure nodes and n=log2(2L) data qubits, unpruned A has 2L-1 Ry and 2L-2 CNOT. Grid-size sensitivity counts depend only on circuit shape; its USD errors reuse the actual GBM cap/grid experiment.",
                 "Sgood is Z on the payoff ancilla. S0 uses X on all data qubits, a clean AND ladder of CCX, CZ, the reversed ladder and X again. Work qubits start and end at zero and are reused.",
                 "CCX is a three-qubit primitive retained separately. The ledger is mixed-level, not an elementary two-qubit total or a fault-tolerant T count. Arbitrary rotation synthesis precision, noise, routing, reset, runtime and classical inference are excluded.",
-                "Power-zero baseline uses the same A and 8960 shots, matching preparation/inverse calls, not gates or runtime. Direct classical histogram summation already knows the mean and needs no quantum gates.",
+                "Power-zero baseline uses the same A with one shot per preparation/inverse call in the amplitude schedule, matching logical calls, not gates or runtime. It needs no reflection workspace. Direct classical histogram summation already knows the mean and needs no quantum gates.",
+                "Gate totals are split into forward preparation, inverse preparation, zero reflection and good reflection. Controlled CNOT, CZ and CCX gates are counted separately from controlled-A and controlled-Q queries (both zero). Complete emitted shot circuits are replayed with clean work bits at every measured power.",
             ], "limitations": [
                 "This compiles the already computed empirical histogram, not coherent scenarios, option pricing or CSV loading. Classical preparation costs from the bounded exposure case remain payable.",
                 "A differs from the Householder unitary away from |0>, but A S0 A^-1 and all Grover success probabilities agree numerically. This is an alternative compilation of the state action, not a decomposition of the full Householder matrix.",
@@ -190,23 +233,36 @@ def oracle_compilation_case(comparison):
             "kicker": "BOUNDED EXPOSURE / LOGICAL GATE INVENTORY",
             "title": "What is hidden inside a preparation call?",
             "description": f"As of {c['as_of']}. {c['data_source']}. Replayable preparation of both 32-node exposure laws; separate forward, inverse and controlled gates.",
-            "metrics": [{"label": key, "value": value, "unit": "calls"} for key, value in (
-                ("Forward preparations", t["preparation_calls"]), ("Inverse preparations", t["inverse_preparation_calls"]),
-                ("CNOT gates", t["gates"]["CNOT"]), ("Toffoli gates (CCX)", t["gates"]["CCX"]))],
+            "metrics": [{"label": key, "value": value, "unit": unit} for key, value, unit in (
+                ("Forward preparations", t["preparation_calls"], "calls"),
+                ("Inverse preparations", t["inverse_preparation_calls"], "calls"),
+                ("CNOT gates", t["gates"]["CNOT"], "gates"),
+                ("Toffoli gates (CCX)", t["gates"]["CCX"], "gates"))],
             "charts": [{"title": "Same logical call budget: compiled gates per model",
                         "x": list(t["gates"]), "xlabel": "Gate type; CCX retained as a three-qubit primitive",
                         "series": [{"name": label, "values": list(ledger["totals"]["gates"].values())}
                                    for label, ledger in (("Amplitude schedule", c["rows"][0]["ledger"]),
                                                          ("Power-zero sampling", c["rows"][0]["power_zero_baseline"]))]},
+                       {"title": "Where the amplitude schedule spends gates",
+                        "x": list(t["gates"]), "xlabel": "Logical gates by operation, per model",
+                        "series": [{"name": label, "values": [block.get(g, 0) for g in t["gates"]]}
+                                   for label, block in (
+                                       ("Forward A", t["gates_by_operation"]["preparation"]),
+                                       ("Inverse A", t["gates_by_operation"]["inverse_preparation"]),
+                                       ("Zero reflection", t["gates_by_operation"]["zero_reflection"]),
+                                       ("Good reflection", t["gates_by_operation"]["good_reflection"]))]},
                        {"title": "Grid precision versus preparation size (400 USD cap, GBM)",
                         "x": [r["levels"] for r in c["grid_sensitivity_gbm"]], "xlabel": "Exposure grid levels",
                         "series": [{"name": "Ry gates per A", "values": [r["per_preparation"]["Ry"] for r in c["grid_sensitivity_gbm"]]},
                                    {"name": "CNOT per A", "values": [r["per_preparation"]["CNOT"] for r in c["grid_sensitivity_gbm"]]}]}],
-            "table": {"columns": ["Power", "Shots", "A", "Inverse A", "S0", "Sgood", "Ry", "CNOT", "CCX", "CZ"],
+            "table": {"columns": ["Power", "Shots", "A", "Inverse A", "S0", "Sgood", "Ry", "CNOT", "CCX", "CZ", "Controlled A", "Controlled Q"],
                       "rows": [[r["grover_power"], r["shots"], r["preparation_calls"], r["inverse_preparation_calls"],
-                                r["zero_reflections"], r["good_reflections"], *[r["gates"][g] for g in ("Ry", "CNOT", "CCX", "CZ")]]
+                                r["zero_reflections"], r["good_reflections"], *[r["gates"][g] for g in ("Ry", "CNOT", "CCX", "CZ")],
+                                r["controlled_A_calls"], r["controlled_Q_calls"]]
                                for r in c["rows"][0]["ledger"]["rows"]]},
             "method": c["conventions"] + [
+                f"Peak qubits: amplitude schedule {c['rows'][0]['ledger']['peak_qubits']}; power-zero baseline {c['rows'][0]['power_zero_baseline']['peak_qubits']}. Forward/inverse gate subtotals are included in the JSON ledger."
+            ] + [
                 f"{r['model']}: state error {r['validation']['state_max_abs_error']:.3g}; Grover matrix error {r['validation']['grover_matrix_max_abs_error']:.3g}. Six data plus four clean work qubits. Full gates and angles in JSON export."
                 for r in c["rows"]] + [
                 f"GBM {r['levels']} nodes: grid error {r['grid_error_usd']:.4f} USD; {r['per_preparation']['Ry']} Ry and {r['per_preparation']['CNOT']} CNOT per A; peak {r['peak_qubits']} qubits."

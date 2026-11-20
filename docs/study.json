@@ -61742,12 +61742,12 @@
     {
      "label": "CNOT gates",
      "value": 555520,
-     "unit": "calls"
+     "unit": "gates"
     },
     {
      "label": "Toffoli gates (CCX)",
      "value": 30720,
-     "unit": "calls"
+     "unit": "gates"
     }
    ],
    "charts": [
@@ -61781,6 +61781,64 @@
         555520,
         0,
         0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Where the amplitude schedule spends gates",
+     "x": [
+      "Ry",
+      "CNOT",
+      "X",
+      "Z",
+      "CZ",
+      "CCX"
+     ],
+     "xlabel": "Logical gates by operation, per model",
+     "series": [
+      {
+       "name": "Forward A",
+       "values": [
+        322560,
+        317440,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Inverse A",
+       "values": [
+        241920,
+        238080,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Zero reflection",
+       "values": [
+        0,
+        0,
+        46080,
+        0,
+        3840,
+        30720
+       ]
+      },
+      {
+       "name": "Good reflection",
+       "values": [
+        0,
+        0,
+        0,
+        3840,
         0,
         0
        ]
@@ -61826,7 +61884,9 @@
      "Ry",
      "CNOT",
      "CCX",
-     "CZ"
+     "CZ",
+     "Controlled A",
+     "Controlled Q"
     ],
     "rows": [
      [
@@ -61838,6 +61898,8 @@
       0,
       16128,
       15872,
+      0,
+      0,
       0,
       0
      ],
@@ -61851,7 +61913,9 @@
       48384,
       47616,
       2048,
-      256
+      256,
+      0,
+      0
      ],
      [
       2,
@@ -61863,7 +61927,9 @@
       80640,
       79360,
       4096,
-      512
+      512,
+      0,
+      0
      ],
      [
       4,
@@ -61875,7 +61941,9 @@
       145152,
       142848,
       8192,
-      1024
+      1024,
+      0,
+      0
      ],
      [
       8,
@@ -61887,7 +61955,9 @@
       274176,
       269824,
       16384,
-      2048
+      2048,
+      0,
+      0
      ]
     ]
    },
@@ -61897,7 +61967,9 @@
     "For L exposure nodes and n=log2(2L) data qubits, unpruned A has 2L-1 Ry and 2L-2 CNOT. Grid-size sensitivity counts depend only on circuit shape; its USD errors reuse the actual GBM cap/grid experiment.",
     "Sgood is Z on the payoff ancilla. S0 uses X on all data qubits, a clean AND ladder of CCX, CZ, the reversed ladder and X again. Work qubits start and end at zero and are reused.",
     "CCX is a three-qubit primitive retained separately. The ledger is mixed-level, not an elementary two-qubit total or a fault-tolerant T count. Arbitrary rotation synthesis precision, noise, routing, reset, runtime and classical inference are excluded.",
-    "Power-zero baseline uses the same A and 8960 shots, matching preparation/inverse calls, not gates or runtime. Direct classical histogram summation already knows the mean and needs no quantum gates.",
+    "Power-zero baseline uses the same A with one shot per preparation/inverse call in the amplitude schedule, matching logical calls, not gates or runtime. It needs no reflection workspace. Direct classical histogram summation already knows the mean and needs no quantum gates.",
+    "Gate totals are split into forward preparation, inverse preparation, zero reflection and good reflection. Controlled CNOT, CZ and CCX gates are counted separately from controlled-A and controlled-Q queries (both zero). Complete emitted shot circuits are replayed with clean work bits at every measured power.",
+    "Peak qubits: amplitude schedule 10; power-zero baseline 6. Forward/inverse gate subtotals are included in the JSON ledger.",
     "gbm: state error 2.22e-16; Grover matrix error 8.88e-16. Six data plus four clean work qubits. Full gates and angles in JSON export.",
     "variance_mixture: state error 1.39e-16; Grover matrix error 1.33e-15. Six data plus four clean work qubits. Full gates and angles in JSON export.",
     "GBM 16 nodes: grid error -11.9546 USD; 31 Ry and 30 CNOT per A; peak 8 qubits.",
@@ -62692,6 +62764,25 @@
          "zero_reflections": 0,
          "good_reflections": 0,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 16128,
+           "CNOT": 15872
+          },
+          "inverse_preparation": {
+           "Ry": 0,
+           "CNOT": 0
+          },
+          "zero_reflection": {
+           "X": 0,
+           "CCX": 0,
+           "CZ": 0
+          },
+          "good_reflection": {
+           "Z": 0
+          }
+         },
          "gates": {
           "Ry": 16128,
           "CNOT": 15872,
@@ -62710,6 +62801,25 @@
          "zero_reflections": 256,
          "good_reflections": 256,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 32256,
+           "CNOT": 31744
+          },
+          "inverse_preparation": {
+           "Ry": 16128,
+           "CNOT": 15872
+          },
+          "zero_reflection": {
+           "X": 3072,
+           "CCX": 2048,
+           "CZ": 256
+          },
+          "good_reflection": {
+           "Z": 256
+          }
+         },
          "gates": {
           "Ry": 48384,
           "CNOT": 47616,
@@ -62728,6 +62838,25 @@
          "zero_reflections": 512,
          "good_reflections": 512,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 48384,
+           "CNOT": 47616
+          },
+          "inverse_preparation": {
+           "Ry": 32256,
+           "CNOT": 31744
+          },
+          "zero_reflection": {
+           "X": 6144,
+           "CCX": 4096,
+           "CZ": 512
+          },
+          "good_reflection": {
+           "Z": 512
+          }
+         },
          "gates": {
           "Ry": 80640,
           "CNOT": 79360,
@@ -62746,6 +62875,25 @@
          "zero_reflections": 1024,
          "good_reflections": 1024,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 80640,
+           "CNOT": 79360
+          },
+          "inverse_preparation": {
+           "Ry": 64512,
+           "CNOT": 63488
+          },
+          "zero_reflection": {
+           "X": 12288,
+           "CCX": 8192,
+           "CZ": 1024
+          },
+          "good_reflection": {
+           "Z": 1024
+          }
+         },
          "gates": {
           "Ry": 145152,
           "CNOT": 142848,
@@ -62764,6 +62912,25 @@
          "zero_reflections": 2048,
          "good_reflections": 2048,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 145152,
+           "CNOT": 142848
+          },
+          "inverse_preparation": {
+           "Ry": 129024,
+           "CNOT": 126976
+          },
+          "zero_reflection": {
+           "X": 24576,
+           "CCX": 16384,
+           "CZ": 2048
+          },
+          "good_reflection": {
+           "Z": 2048
+          }
+         },
          "gates": {
           "Ry": 274176,
           "CNOT": 269824,
@@ -62782,6 +62949,7 @@
         "zero_reflections": 3840,
         "good_reflections": 3840,
         "controlled_A_calls": 0,
+        "controlled_Q_calls": 0,
         "gates": {
          "Ry": 564480,
          "CNOT": 555520,
@@ -62790,13 +62958,36 @@
          "CZ": 3840,
          "CCX": 30720
         },
-        "preparation_or_inverse_calls": 8960
+        "preparation_or_inverse_calls": 8960,
+        "gates_by_operation": {
+         "preparation": {
+          "Ry": 322560,
+          "CNOT": 317440
+         },
+         "inverse_preparation": {
+          "Ry": 241920,
+          "CNOT": 238080
+         },
+         "zero_reflection": {
+          "X": 46080,
+          "CCX": 30720,
+          "CZ": 3840
+         },
+         "good_reflection": {
+          "Z": 3840
+         }
+        },
+        "controlled_gates": {
+         "CNOT": 555520,
+         "CZ": 3840,
+         "CCX": 30720
+        }
        }
       },
       "power_zero_baseline": {
        "data_qubits": 6,
-       "clean_work_qubits": 4,
-       "peak_qubits": 10,
+       "clean_work_qubits": 0,
+       "peak_qubits": 6,
        "per_preparation": {
         "Ry": 63,
         "CNOT": 62
@@ -62816,6 +63007,25 @@
          "zero_reflections": 0,
          "good_reflections": 0,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 564480,
+           "CNOT": 555520
+          },
+          "inverse_preparation": {
+           "Ry": 0,
+           "CNOT": 0
+          },
+          "zero_reflection": {
+           "X": 0,
+           "CCX": 0,
+           "CZ": 0
+          },
+          "good_reflection": {
+           "Z": 0
+          }
+         },
          "gates": {
           "Ry": 564480,
           "CNOT": 555520,
@@ -62834,6 +63044,7 @@
         "zero_reflections": 0,
         "good_reflections": 0,
         "controlled_A_calls": 0,
+        "controlled_Q_calls": 0,
         "gates": {
          "Ry": 564480,
          "CNOT": 555520,
@@ -62842,7 +63053,30 @@
          "CZ": 0,
          "CCX": 0
         },
-        "preparation_or_inverse_calls": 8960
+        "preparation_or_inverse_calls": 8960,
+        "gates_by_operation": {
+         "preparation": {
+          "Ry": 564480,
+          "CNOT": 555520
+         },
+         "inverse_preparation": {
+          "Ry": 0,
+          "CNOT": 0
+         },
+         "zero_reflection": {
+          "X": 0,
+          "CCX": 0,
+          "CZ": 0
+         },
+         "good_reflection": {
+          "Z": 0
+         }
+        },
+        "controlled_gates": {
+         "CNOT": 555520,
+         "CZ": 0,
+         "CCX": 0
+        }
        }
       },
       "validation": {
@@ -62854,31 +63088,51 @@
          "grover_power": 0,
          "compiled": 0.34916736233618917,
          "householder": 0.3491673623361895,
-         "absolute_difference": 3.3306690738754696e-16
+         "absolute_difference": 3.3306690738754696e-16,
+         "emitted_gates_probability": 0.34916736233618917,
+         "emitted_gates_absolute_difference": 3.3306690738754696e-16,
+         "full_state_max_abs_error": 2.220446049250313e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 1,
          "compiled": 0.8975936634229762,
          "householder": 0.8975936634229764,
-         "absolute_difference": 2.220446049250313e-16
+         "absolute_difference": 2.220446049250313e-16,
+         "emitted_gates_probability": 0.8975936634229761,
+         "emitted_gates_absolute_difference": 3.3306690738754696e-16,
+         "full_state_max_abs_error": 4.0245584642661925e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 2,
          "compiled": 0.0003724869882249784,
          "householder": 0.00037248698822502427,
-         "absolute_difference": 4.586175189613684e-17
+         "absolute_difference": 4.586175189613684e-17,
+         "emitted_gates_probability": 0.0003724869882249824,
+         "emitted_gates_absolute_difference": 4.185020385794047e-17,
+         "full_state_max_abs_error": 6.245004513516506e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 4,
          "compiled": 0.31284929862882505,
          "householder": 0.3128492986288238,
-         "absolute_difference": 1.2212453270876722e-15
+         "absolute_difference": 1.2212453270876722e-15,
+         "emitted_gates_probability": 0.31284929862882477,
+         "emitted_gates_absolute_difference": 9.43689570931383e-16,
+         "full_state_max_abs_error": 7.216449660063518e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 8,
          "compiled": 0.9394915373197362,
          "householder": 0.9394915373197412,
-         "absolute_difference": 4.9960036108132044e-15
+         "absolute_difference": 4.9960036108132044e-15,
+         "emitted_gates_probability": 0.939491537319737,
+         "emitted_gates_absolute_difference": 4.218847493575595e-15,
+         "full_state_max_abs_error": 1.1102230246251565e-15,
+         "workspace_leakage_probability": 0.0
         }
        ]
       }
@@ -63662,6 +63916,25 @@
          "zero_reflections": 0,
          "good_reflections": 0,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 16128,
+           "CNOT": 15872
+          },
+          "inverse_preparation": {
+           "Ry": 0,
+           "CNOT": 0
+          },
+          "zero_reflection": {
+           "X": 0,
+           "CCX": 0,
+           "CZ": 0
+          },
+          "good_reflection": {
+           "Z": 0
+          }
+         },
          "gates": {
           "Ry": 16128,
           "CNOT": 15872,
@@ -63680,6 +63953,25 @@
          "zero_reflections": 256,
          "good_reflections": 256,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 32256,
+           "CNOT": 31744
+          },
+          "inverse_preparation": {
+           "Ry": 16128,
+           "CNOT": 15872
+          },
+          "zero_reflection": {
+           "X": 3072,
+           "CCX": 2048,
+           "CZ": 256
+          },
+          "good_reflection": {
+           "Z": 256
+          }
+         },
          "gates": {
           "Ry": 48384,
           "CNOT": 47616,
@@ -63698,6 +63990,25 @@
          "zero_reflections": 512,
          "good_reflections": 512,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 48384,
+           "CNOT": 47616
+          },
+          "inverse_preparation": {
+           "Ry": 32256,
+           "CNOT": 31744
+          },
+          "zero_reflection": {
+           "X": 6144,
+           "CCX": 4096,
+           "CZ": 512
+          },
+          "good_reflection": {
+           "Z": 512
+          }
+         },
          "gates": {
           "Ry": 80640,
           "CNOT": 79360,
@@ -63716,6 +64027,25 @@
          "zero_reflections": 1024,
          "good_reflections": 1024,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 80640,
+           "CNOT": 79360
+          },
+          "inverse_preparation": {
+           "Ry": 64512,
+           "CNOT": 63488
+          },
+          "zero_reflection": {
+           "X": 12288,
+           "CCX": 8192,
+           "CZ": 1024
+          },
+          "good_reflection": {
+           "Z": 1024
+          }
+         },
          "gates": {
           "Ry": 145152,
           "CNOT": 142848,
@@ -63734,6 +64064,25 @@
          "zero_reflections": 2048,
          "good_reflections": 2048,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 145152,
+           "CNOT": 142848
+          },
+          "inverse_preparation": {
+           "Ry": 129024,
+           "CNOT": 126976
+          },
+          "zero_reflection": {
+           "X": 24576,
+           "CCX": 16384,
+           "CZ": 2048
+          },
+          "good_reflection": {
+           "Z": 2048
+          }
+         },
          "gates": {
           "Ry": 274176,
           "CNOT": 269824,
@@ -63752,6 +64101,7 @@
         "zero_reflections": 3840,
         "good_reflections": 3840,
         "controlled_A_calls": 0,
+        "controlled_Q_calls": 0,
         "gates": {
          "Ry": 564480,
          "CNOT": 555520,
@@ -63760,13 +64110,36 @@
          "CZ": 3840,
          "CCX": 30720
         },
-        "preparation_or_inverse_calls": 8960
+        "preparation_or_inverse_calls": 8960,
+        "gates_by_operation": {
+         "preparation": {
+          "Ry": 322560,
+          "CNOT": 317440
+         },
+         "inverse_preparation": {
+          "Ry": 241920,
+          "CNOT": 238080
+         },
+         "zero_reflection": {
+          "X": 46080,
+          "CCX": 30720,
+          "CZ": 3840
+         },
+         "good_reflection": {
+          "Z": 3840
+         }
+        },
+        "controlled_gates": {
+         "CNOT": 555520,
+         "CZ": 3840,
+         "CCX": 30720
+        }
        }
       },
       "power_zero_baseline": {
        "data_qubits": 6,
-       "clean_work_qubits": 4,
-       "peak_qubits": 10,
+       "clean_work_qubits": 0,
+       "peak_qubits": 6,
        "per_preparation": {
         "Ry": 63,
         "CNOT": 62
@@ -63786,6 +64159,25 @@
          "zero_reflections": 0,
          "good_reflections": 0,
          "controlled_A_calls": 0,
+         "controlled_Q_calls": 0,
+         "gates_by_operation": {
+          "preparation": {
+           "Ry": 564480,
+           "CNOT": 555520
+          },
+          "inverse_preparation": {
+           "Ry": 0,
+           "CNOT": 0
+          },
+          "zero_reflection": {
+           "X": 0,
+           "CCX": 0,
+           "CZ": 0
+          },
+          "good_reflection": {
+           "Z": 0
+          }
+         },
          "gates": {
           "Ry": 564480,
           "CNOT": 555520,
@@ -63804,6 +64196,7 @@
         "zero_reflections": 0,
         "good_reflections": 0,
         "controlled_A_calls": 0,
+        "controlled_Q_calls": 0,
         "gates": {
          "Ry": 564480,
          "CNOT": 555520,
@@ -63812,7 +64205,30 @@
          "CZ": 0,
          "CCX": 0
         },
-        "preparation_or_inverse_calls": 8960
+        "preparation_or_inverse_calls": 8960,
+        "gates_by_operation": {
+         "preparation": {
+          "Ry": 564480,
+          "CNOT": 555520
+         },
+         "inverse_preparation": {
+          "Ry": 0,
+          "CNOT": 0
+         },
+         "zero_reflection": {
+          "X": 0,
+          "CCX": 0,
+          "CZ": 0
+         },
+         "good_reflection": {
+          "Z": 0
+         }
+        },
+        "controlled_gates": {
+         "CNOT": 555520,
+         "CZ": 0,
+         "CCX": 0
+        }
        }
       },
       "validation": {
@@ -63824,31 +64240,51 @@
          "grover_power": 0,
          "compiled": 0.34888187531502024,
          "householder": 0.34888187531502013,
-         "absolute_difference": 1.1102230246251565e-16
+         "absolute_difference": 1.1102230246251565e-16,
+         "emitted_gates_probability": 0.34888187531502024,
+         "emitted_gates_absolute_difference": 1.1102230246251565e-16,
+         "full_state_max_abs_error": 1.3877787807814457e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 1,
          "compiled": 0.8981377755688007,
          "householder": 0.898137775568799,
-         "absolute_difference": 1.6653345369377348e-15
+         "absolute_difference": 1.6653345369377348e-15,
+         "emitted_gates_probability": 0.8981377755688,
+         "emitted_gates_absolute_difference": 9.992007221626409e-16,
+         "full_state_max_abs_error": 2.7755575615628914e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 2,
          "compiled": 0.00031694163906438106,
          "householder": 0.00031694163906440274,
-         "absolute_difference": 2.168404344971009e-17
+         "absolute_difference": 2.168404344971009e-17,
+         "emitted_gates_probability": 0.0003169416390643587,
+         "emitted_gates_absolute_difference": 4.401860820291148e-17,
+         "full_state_max_abs_error": 5.898059818321144e-16,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 4,
          "compiled": 0.31535126962723037,
          "householder": 0.3153512696272279,
-         "absolute_difference": 2.4424906541753444e-15
+         "absolute_difference": 2.4424906541753444e-15,
+         "emitted_gates_probability": 0.3153512696272309,
+         "emitted_gates_absolute_difference": 2.9976021664879227e-15,
+         "full_state_max_abs_error": 1.0269562977782698e-15,
+         "workspace_leakage_probability": 0.0
         },
         {
          "grover_power": 8,
          "compiled": 0.9370411854293754,
          "householder": 0.937041185429369,
-         "absolute_difference": 6.439293542825908e-15
+         "absolute_difference": 6.439293542825908e-15,
+         "emitted_gates_probability": 0.9370411854293722,
+         "emitted_gates_absolute_difference": 3.219646771412954e-15,
+         "full_state_max_abs_error": 1.7069679003611782e-15,
+         "workspace_leakage_probability": 0.0
         }
        ]
       }
@@ -63913,7 +64349,8 @@
      "For L exposure nodes and n=log2(2L) data qubits, unpruned A has 2L-1 Ry and 2L-2 CNOT. Grid-size sensitivity counts depend only on circuit shape; its USD errors reuse the actual GBM cap/grid experiment.",
      "Sgood is Z on the payoff ancilla. S0 uses X on all data qubits, a clean AND ladder of CCX, CZ, the reversed ladder and X again. Work qubits start and end at zero and are reused.",
      "CCX is a three-qubit primitive retained separately. The ledger is mixed-level, not an elementary two-qubit total or a fault-tolerant T count. Arbitrary rotation synthesis precision, noise, routing, reset, runtime and classical inference are excluded.",
-     "Power-zero baseline uses the same A and 8960 shots, matching preparation/inverse calls, not gates or runtime. Direct classical histogram summation already knows the mean and needs no quantum gates."
+     "Power-zero baseline uses the same A with one shot per preparation/inverse call in the amplitude schedule, matching logical calls, not gates or runtime. It needs no reflection workspace. Direct classical histogram summation already knows the mean and needs no quantum gates.",
+     "Gate totals are split into forward preparation, inverse preparation, zero reflection and good reflection. Controlled CNOT, CZ and CCX gates are counted separately from controlled-A and controlled-Q queries (both zero). Complete emitted shot circuits are replayed with clean work bits at every measured power."
     ],
     "limitations": [
      "This compiles the already computed empirical histogram, not coherent scenarios, option pricing or CSV loading. Classical preparation costs from the bounded exposure case remain payable.",
