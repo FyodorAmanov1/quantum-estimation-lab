@@ -1,5 +1,8 @@
 # Primary references and implementation boundaries
 
+- [Mottonen, Vartiainen, Bergholm and Salomaa, Transformation of quantum states using uniformly controlled rotations (2005)](https://arxiv.org/abs/quant-ph/0407010): primary basis for the Gray-code rotation multiplexors in QE06. This application prepares only a real nonnegative state, retains zero-angle gates and counts its own emitted sequence; it does not use the paper's general complex-state gate totals.
+- [Barenco et al., Elementary gates for quantum computation (1995)](https://arxiv.org/abs/quant-ph/9503016): primary background for controlled gates and reversible constructions. QE06 explicitly emits a clean AND ladder and retains CCX as a separate three-qubit primitive. Its mixed-level ledger is not a count of elementary two-qubit gates or a fault-tolerant resource estimate.
+
 - [Clopper and Pearson, The use of confidence or fiducial limits illustrated in the case of the binomial (1934)](https://doi.org/10.1093/biomet/26.4.404): primary basis for the equal-tailed exact binomial baseline and Monte Carlo coverage uncertainty intervals in QE05. The likelihood intervals retain an asymptotic cutoff and have no corresponding finite-sample guarantee.
 
 - [Original portfolio PFE project](https://github.com/FyodorAmanov1/QStockPrediction)

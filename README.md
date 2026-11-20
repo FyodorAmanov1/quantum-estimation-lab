@@ -82,6 +82,24 @@ excluding cap, grid, scenario and model errors. See [QE05](reports/QE05.md).
 
 ## Run locally
 
+The **Oracle compilation ledger** case provides a replayable Ry/CNOT circuit
+for both bounded exposure laws. Each 32-node preparation uses 63 Ry and 62
+CNOT gates. The measured schedule needs 5,120 forward preparations, 3,840
+inverses and 3,840 Grover iterations per model: 564,480 Ry, 555,520 CNOT,
+30,720 Toffoli (CCX), 3,840 CZ, 46,080 X and 3,840 Z gates. Six data and four
+reusable clean work qubits are counted. There are no controlled-A calls.
+CCX remains a three-qubit primitive and rotations have ideal real angles;
+these are logical counts, with no fault-tolerant synthesis or hardware claim.
+Equal-call power-zero sampling has the same Ry/CNOT totals and no reflection
+gates. The classical histogram mean is already known before compilation.
+The studio also separates forward and inverse gate costs: 322,560/241,920 Ry
+and 317,440/238,080 CNOT, respectively. Complete emitted shot circuits are
+replayed at every scheduled power, including reflection workspace cleanup.
+The power-zero comparator uses six peak qubits; the amplitude schedule uses ten.
+At a 400 USD cap, moving from 16 to 64 nodes reduces GBM floor-grid loss from
+11.9546 to 2.8672 USD while increasing Ry gates per preparation from 31 to 127.
+See [QE06 methods, findings and limitations](reports/QE06.md).
+
 Use Python 3.12. From the repository root:
 
 ```bash

@@ -774,6 +774,11 @@ def experiment(price_csv=None, as_of=None):
     except ImportError:
         from coverage import amplitude_coverage_case, amplitude_coverage_comparison
     cases.append(amplitude_coverage_case(amplitude_coverage_comparison(bounded)))
+    try:
+        from .oracle_resources import oracle_compilation_case, oracle_compilation_comparison
+    except ImportError:
+        from oracle_resources import oracle_compilation_case, oracle_compilation_comparison
+    cases.append(oracle_compilation_case(oracle_compilation_comparison(bounded)))
     return {
         "schema_version": 1,
         "slug": "quantum-estimation-lab",
@@ -783,6 +788,14 @@ def experiment(price_csv=None, as_of=None):
         "seed": 1729,
         "cases": cases,
         "references": [
+            {
+                "title": "Mottonen et al.: state transformation using uniformly controlled rotations",
+                "url": "https://arxiv.org/abs/quant-ph/0407010",
+            },
+            {
+                "title": "Barenco et al.: elementary gates for quantum computation",
+                "url": "https://arxiv.org/abs/quant-ph/9503016",
+            },
             {
                 "title": "Clopper and Pearson: exact binomial confidence limits (1934)",
                 "url": "https://doi.org/10.1093/biomet/26.4.404",

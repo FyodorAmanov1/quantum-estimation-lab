@@ -111,6 +111,7 @@ def convergence_experiment(path_budgets=(256, 1024, 4096, 16384), n_seeds=128, s
 def experiment(price_csv=None, as_of=None):
     from src.studio import calibrated_comparison, risk_model_comparison, bounded_exposure_comparison
     from src.coverage import amplitude_coverage_comparison
+    from src.oracle_resources import oracle_compilation_comparison
     import scipy
     reference = black_scholes_call()
     plain, anti = monte_carlo(), monte_carlo(antithetic=True)
@@ -121,7 +122,8 @@ def experiment(price_csv=None, as_of=None):
                         "portfolio_calibration": calibrated_comparison(price_csv, as_of),
                         "portfolio_model_risk": risk_model_comparison(price_csv, as_of),
                         "bounded_exposure": bounded,
-                        "amplitude_coverage": amplitude_coverage_comparison(bounded)},
+                        "amplitude_coverage": amplitude_coverage_comparison(bounded),
+                        "oracle_compilation": oracle_compilation_comparison(bounded)},
             "provenance": {"data": "Call benchmark: synthetic risk-neutral GBM; portfolio comparison records its own dated CSV provenance",
                            "scipy": scipy.__version__,
                            "numpy": np.__version__, "python": platform.python_version(),
